@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in — AlphaStrats</title>
+<meta name="description" content="Log in or create your AlphaStrats account.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=17">
+</head>
+<body data-page="login" data-live="off">
+<script src="layout.js?v=17"></script>
+
+<main id="top">
+<section class="auth">
+  <div class="panel auth-card">
+    <h1 id="auTitle">Log in</h1>
+    <p class="auth-sub" id="auSub">Welcome back. Log in to open your member tools.</p>
+    <div class="auth-preview" id="auPreview" hidden><b>Preview mode.</b> The real login service is not connected yet, so accounts created here are saved only in this browser.</div>
+    <form id="auForm" novalidate>
+      <label id="auNameRow" hidden>Your name<input id="auName" type="text" autocomplete="name" placeholder="Alex"></label>
+      <label>Email<input id="auEmail" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label id="auPwRow">Password<input id="auPw" type="password" autocomplete="current-password" placeholder="At least 8 characters" required></label>
+      <p class="auth-msg" id="auMsg" role="alert"></p>
+      <button class="btn btn-primary btn-block" id="auGo" type="submit">Log in</button>
+    </form>
+    <div class="auth-links"><button id="auSwap" type="button">Create a free account</button><button id="auReset" type="button">Forgot password?</button></div>
+    <p class="note">Your account keeps your price alerts and settings. We never see your password.</p>
+  </div>
+  <div class="auth-side">
+    <h2>One login, every tool.</h2>
+    <ul>
+      <li><b>Daily brief</b>What moved, who is leading, and the market mood.</li>
+      <li><b>Dip-buying alerts</b>Markets pulling back inside an uptrend, as they appear.</li>
+      <li><b>Strategy signals</b>The latest entry, stop and exit of each premium strategy.</li>
+      <li><b>Your own price alerts</b>Pick a market and a price; get told when it is hit.</li>
+      <li><b>Risk calculator</b>How big a trade to take so one loss never hurts much.</li>
+    </ul>
+  </div>
+</section>
+<script>
+(function () {
+  let mode = 'in';
+  const $$ = (id) => document.getElementById(id), msg = (t, ok) => { $$('auMsg').textContent = t; $$('auMsg').className = 'auth-msg' + (ok ? ' ok' : ''); };
+  function paint() {
+    const up = mode === 'up', rs = mode === 'reset';
+    $$('auTitle').textContent = up ? 'Create your account' : rs ? 'Reset your password' : 'Log in';
+    $$('auSub').textContent = up ? 'Free to join. It takes a few seconds.' : rs ? 'Enter your email and we will send you a reset link.' : 'Welcome back. Log in to open your member tools.';
+    $$('auNameRow').hidden = !up; $$('auPwRow').hidden = rs;
+    $$('auPw').autocomplete = up ? 'new-password' : 'current-password';
+    $$('auGo').textContent = up ? 'Create account' : rs ? 'Send reset link' : 'Log in';
+    $$('auSwap').textContent = up || rs ? 'I already have an account' : 'Create a free account';
+    $$('auReset').hidden = up || rs; msg('');
+  }
+  document.addEventListener('DOMContentLoaded', async () => {
+    await Auth.ready;
+    if (Auth.user()) { location.replace('members.html'); return; }
+    $$('auPreview').hidden = Auth.live;
+    if (location.hash === '#signup') mode = 'up';
+    paint();
+    $$('auSwap').onclick = () => { mode = mode === 'in' ? 'up' : 'in'; paint(); };
+    $$('auReset').onclick = () => { mode = 'reset'; paint(); };
+    $$('auForm').onsubmit = async (e) => {
+      e.preventDefault(); $$('auGo').disabled = true; msg('');
+      try {
+        if (mode === 'reset') { await Auth.reset($$('auEmail').value); msg('Check your email for the reset link.', true); }
+        else if (mode === 'up') { const r = await Auth.signUp($$('auName').value.trim(), $$('auEmail').value, $$('auPw').value); if (r === 'confirm') msg('Almost done: check your email and click the link to confirm your account.', true); else location.href = 'members.html'; }
+        else { await Auth.signIn($$('auEmail').value, $$('auPw').value); location.href = 'members.html'; }
+      } catch (err) { msg(err.message); }
+      $$('auGo').disabled = false;
+    };
+  });
+})();
+</script>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=17"></script>
+<script src="auth.js?v=17"></script>
+</body>
+</html>

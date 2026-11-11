@@ -461,6 +461,7 @@ async function runScanner() {
   paintCards();
   if (has('flow')) paintFlowScan();
   if (has('moodFear')) paintMood();
+  if (typeof onScan === 'function') onScan();
 }
 function paintCards() {
   if (!has('oppCards')) return;
@@ -855,6 +856,7 @@ function start() {
   if (has('cmpChart')) initCompare();
   if (has('fundLong')) initFunding();
   if (has('hmap')) initHeatPage();
+  if (has('memApp')) initMembers();
   if (has('tradesList')) initTerminal();
   if (has('sentGauge')) initSentiment();
   if (has('priceChart') || has('btStrats')) select(A.has(q.get('m')) ? q.get('m') : A.has('p:BTCUSDT') ? 'p:BTCUSDT' : all().sort(byVol)[0].id, false);
@@ -865,6 +867,6 @@ function start() {
     if (document.querySelector('[data-movers]')) paintMovers();
     if (has('bentoMovers')) paintBentoMovers();
   }, 5000);
-  if (has('oppCards') || has('flow') || has('moodFear')) { runScanner(); setInterval(runScanner, SCAN_TTL + 5000); }
+  if (has('oppCards') || has('flow') || has('moodFear') || has('memApp')) { runScanner(); setInterval(runScanner, SCAN_TTL + 5000); }
 }
 boot();
