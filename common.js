@@ -37,7 +37,10 @@ const STOCK_LOGO = { // markets whose logo is filed under a different ticker
   BRKB: 'BRK-B', SAMSUNG: '005930.KS', SKHYNIX: '000660.KS', HYUNDAI: '005380.KS', NAVER: '035420.KS', LGELECTRONICS: '066570.KS',
   SAMSUNGEM: '009150.KS', HANMI: '042700.KS', TENCENT: '0700.HK', HK0700: '0700.HK', HK1810: '1810.HK', MEITUAN: '3690.HK',
   KUAISHOU: '1024.HK', POPMART: '9992.HK', HK0992: '0992.HK', BYD: '1211.HK',
+  SOXL: 'SOXS', TMF: 'SOXS', TSLL: 'SOXS', // same fund company; their own files are a white logo that cannot be seen
 };
+// Logos drawn in white or very pale colours: shown on a dark circle so they are visible.
+const DARK_LOGO = new Set('FLNC NOK NKE SMH ZM HIMS UBER IBM APP V CEG ANET DIS MARA ABBV QQQ UNH MRVL IREN ONDS'.split(' '));
 const BADGE = { // commodities and currencies have no logo, so they get a clear symbol
   XAU: ['Au', '#c9971a'], XAG: ['Ag', '#8d99a8'], XPT: ['Pt', '#5f87a6'], XPD: ['Pd', '#7a7fa6'], COPPER: ['Cu', '#b8692e'],
   CL: ['Oil', '#1f2937'], BZ: ['Oil', '#44403c'], NATGAS: ['Gas', '#2563eb'], USDBRL: ['R$', '#0a9d6c'],
@@ -60,7 +63,7 @@ function icon(a, size = '') {
   let h = 0;
   for (const ch of a.t) h = (h * 31 + ch.charCodeAt(0)) % 360;
   const txt = a.t.length > 4 ? a.t.slice(0, 3) : a.t, src = iconSources(a);
-  const img = src.length ? `<img class="${a.kind === 'stocks' ? 'logo-stock' : ''}" src="${src[0]}" data-alt="${src.slice(1).join('|')}" alt="" loading="lazy" onerror="iconNext(this)">` : '';
+  const img = src.length ? `<img class="${a.kind === 'stocks' ? 'logo-stock' + (DARK_LOGO.has(a.t) ? ' on-dark' : '') : ''}" src="${src[0]}" data-alt="${src.slice(1).join('|')}" alt="" loading="lazy" onerror="iconNext(this)">` : '';
   return `<span class="ico ${size}"${a.kind === 'crypto' ? ` data-coin="${esc(coinBase(a))}"` : ''} style="background:linear-gradient(135deg,hsl(${h} 62% 48%),hsl(${(h + 45) % 360} 68% 32%))">${esc(txt)}${img}</span>`;
 }
 function learnCoinLogos(pairs) { // [[SYMBOL, imageUrl], ...] from the coin-info source; fills any icons still showing initials
