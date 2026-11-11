@@ -852,6 +852,7 @@ function start() {
   }
   if (has('bentoNav')) initBento();
   if (has('flow')) paintFlow();
+  if (has('pipe')) PIPE.init();
   if (has('heat')) { initHeat(); paintHeat(); }
   if (has('cmpChart')) initCompare();
   if (has('fundLong')) initFunding();

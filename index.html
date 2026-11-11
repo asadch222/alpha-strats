@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=18">
+<link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body data-page="home">
-<script src="layout.js?v=18"></script>
+<script src="layout.js?v=19"></script>
 
 <main id="top">
 <section class="hero">
@@ -60,6 +60,38 @@
         <span class="fstep"><b>5</b>Result</span>
         <div id="flowResult"></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="engine" class="section">
+  <div class="section-head">
+    <div><p class="eyebrow">Live decision engine</p><h2>Watch the engine check a market, step by step</h2><p>One market at a time goes through the same five steps. Follow the glowing line to see what was checked and why it gets its verdict. Green passed, amber is close, red is out.</p></div>
+    <a class="btn btn-ghost" href="tools.html">Open the full scanner</a>
+  </div>
+  <div class="pipe" id="pipe">
+    <header class="pipe-top">
+      <div class="pt-name"><b>ALPHASTRATS</b> / DECISION ENGINE<span><i class="dot on"></i>live</span></div>
+      <div class="pt-stats">
+        <div><small>Checks run</small><b id="pipeChecks">0</b></div>
+        <div><small>Price updates / sec</small><b id="pipeRate">–</b><span id="pipeRateSpark"></span></div>
+        <div><small>Markets analysed</small><b id="pipeAnalysed">–</b></div>
+        <div class="pt-score"><small>Setup score</small><b id="pipeScore">–</b><span id="pipeBadge"></span></div>
+      </div>
+    </header>
+    <div class="pipe-case">
+      <a class="pc-main" id="pipeCase" title="Open this market's page"><span class="pc-tag">Starting…</span></a>
+      <div class="pc-steps" id="pipeSteps"><i>Data</i><i>Checks</i><i>Score</i><i>Gate</i><i>Verdict</i></div>
+      <p class="pc-path" id="pipePath">Loading price history for the first markets…</p>
+    </div>
+    <div class="pipe-stage" id="pipeStage"><div class="pipe-world" id="pipeWorld"></div></div>
+    <div class="pipe-panels">
+      <div><h4>This market's checks <em>0 to 100</em></h4><div class="pbars" id="pipeBars"></div></div>
+      <div><h4>Scores across all markets</h4><div class="pstream" id="pipeStream"></div></div>
+      <div><h4>Queue <em>tap to open</em></h4><div class="pqueue" id="pipeQueue"></div></div>
+      <div><h4>Run log</h4><ul class="plog" id="pipeLog"><li><span>Waiting for the first verdict…</span></li></ul></div>
+      <div><h4>Verdicts so far</h4><div class="pbars" id="pipeSplit"></div></div>
+      <div><h4>Guardrails</h4><ul class="pguard"><li>Reads prices only. Places no orders.</li><li>Same rules for every market.</li><li>Education, not financial advice.</li></ul></div>
     </div>
   </div>
 </section>
@@ -155,15 +187,16 @@
 
 <script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="coin-logos.js?v=18"></script>
-<script src="common.js?v=18"></script>
-<script src="strategies.js?v=18"></script>
-<script src="strategy-view.js?v=18"></script>
-<script src="features.js?v=18"></script>
-<script src="terminal.js?v=18"></script>
-<script src="sentiment.js?v=18"></script>
-<script src="app.js?v=18"></script>
-<script src="config.js?v=18"></script>
-<script src="auth.js?v=18"></script>
+<script src="coin-logos.js?v=19"></script>
+<script src="common.js?v=19"></script>
+<script src="strategies.js?v=19"></script>
+<script src="strategy-view.js?v=19"></script>
+<script src="features.js?v=19"></script>
+<script src="terminal.js?v=19"></script>
+<script src="sentiment.js?v=19"></script>
+<script src="pipeline.js?v=19"></script>
+<script src="app.js?v=19"></script>
+<script src="config.js?v=19"></script>
+<script src="auth.js?v=19"></script>
 </body>
 </html>
