@@ -105,6 +105,7 @@ async function loadCG() {
   const m = new Map();
   for (const c of pages.flat()) { const k = c.symbol.toUpperCase(); if (!m.has(k)) m.set(k, [c.name, c.market_cap_rank, c.market_cap, c.fully_diluted_valuation, c.total_volume, c.circulating_supply, c.max_supply, c.total_supply, c.ath, c.ath_change_percentage]); }
   if (m.size) store.set('as.cg', { ts: Date.now(), rows: [...m] });
+  const seen = new Set(); learnCoinLogos(pages.flat().filter((c) => { const k = c.symbol.toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true; }).map((c) => [c.symbol.toUpperCase(), c.image && c.image.replace('/large/', '/small/')]));
   return (pro.cg = m);
 }
 async function paintInfo() {
