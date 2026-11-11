@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market heatmaps — AlphaStrats</title>
+<meta name="description" content="Live heatmaps of stocks, crypto and commodities, grouped by sector, sized by trading volume and coloured by price change.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=15">
+</head>
+<body data-page="heatmaps">
+<script src="layout.js?v=15"></script>
+
+<main id="top">
+<section class="phero small">
+  <p class="eyebrow">Heatmaps</p>
+  <h1>The whole market at a glance.</h1>
+  <p class="lede">Every tile is one market. Bigger tiles trade more money. Green is rising, red is falling, and brighter means a bigger move. Tap any tile to open its page.</p>
+</section>
+
+<section class="section tight">
+  <div class="hm-wrap">
+    <aside class="panel hm-side">
+      <h3>Heatmap</h3>
+      <div class="hm-kinds" id="hmKinds"><button class="is-active" data-kind="stocks">Stocks</button><button data-kind="crypto">Crypto</button><button data-kind="commodities">Commodities</button></div>
+      <label>Tile size<select id="hmSize"><option value="vol">Trading volume</option><option value="equal">All the same size</option></select></label>
+      <label>Tile colour<select id="hmColor"><option value="chg">24-hour change</option><option value="fund">Funding rate</option></select></label>
+      <label class="hm-check"><input type="checkbox" id="hmGroup" checked> Group by sector</label>
+      <button class="btn btn-dark btn-block" id="hmFull">⛶ Full screen</button>
+      <p class="hm-stats" id="hmStats"></p>
+    </aside>
+    <div class="hm-panel" id="hmPanel">
+      <div class="hmap" id="hmap"></div>
+      <div class="hm-legend"><span id="hmLo"></span><i></i><span id="hmHi"></span><em id="hmLegend"></em></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><h2>How to read a heatmap</h2></div></div>
+  <div class="learn-grid">
+    <div class="panel term"><b>Size</b><p>The bigger the tile, the more money traded in that market over the last 24 hours. Big tiles are where the action is.</p></div>
+    <div class="panel term"><b>Colour</b><p>Green means the price is up over 24 hours, red means down. The brighter the colour, the bigger the move.</p></div>
+    <div class="panel term"><b>Groups</b><p>Markets are boxed together by type, such as chip makers or meme coins, so you can see when a whole sector moves at once.</p></div>
+    <div class="panel term"><b>What to look for</b><p>A screen that is mostly one colour shows a market moving together. A lone bright tile in a dull group is something unusual worth opening.</p></div>
+  </div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="coin-logos.js?v=15"></script>
+<script src="common.js?v=15"></script>
+<script src="strategies.js?v=15"></script>
+<script src="strategy-view.js?v=15"></script>
+<script src="features.js?v=15"></script>
+<script src="heatmap-page.js?v=15"></script>
+<script src="terminal.js?v=15"></script>
+<script src="sentiment.js?v=15"></script>
+<script src="app.js?v=15"></script>
+</body>
+</html>

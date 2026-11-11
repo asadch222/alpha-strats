@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=14">
+<link rel="stylesheet" href="styles.css?v=15">
 </head>
 <body data-page="chart">
-<script src="layout.js?v=14"></script>
+<script src="layout.js?v=15"></script>
 
 <main id="top">
 <section class="pro" id="chart">
@@ -62,6 +62,13 @@
       </div>
     </aside>
   </div>
+  <div class="section-head pro-h" id="perf"><div><h2>Performance and money flow</h2><p>How this market has done over time, and whether money is flowing in or out.</p></div></div>
+  <div class="perf-grid">
+    <div class="panel perf-box"><h3 id="perfTitle">Price performance</h3><p class="xp">How much the price has changed over each period. The small line shows the path it took.</p><div class="perf-tiles" id="perfTiles"><div class="skeleton">Loading…</div></div></div>
+    <div class="panel perf-box"><h3>Money flow <small>last 1,000 trades</small></h3><p class="xp">Buys are money flowing in, sells are money flowing out, split by the size of each order. Large orders show what bigger traders are doing.</p><div class="flow-box" id="flowBox"><div class="skeleton">Loading…</div></div></div>
+    <div class="panel perf-box"><h3>Net buying, day by day <b id="nbNow"></b></h3><p class="xp">Green bars: more was bought than sold that day. Red bars: more was sold. The line is the price.</p><div class="data-chart tall"><div id="nbChart"></div></div></div>
+    <div class="panel perf-box"><h3>Open interest, day by day <b id="oiNow"></b></h3><p class="xp">Bars show the total value of open positions each day. Rising bars mean more money is committed to this market. The line is the price.</p><div class="data-chart tall"><div id="oiChart"></div></div></div>
+  </div>
   <div class="section-head pro-h" id="analysis"><div><h2>Technical analysis, explained</h2><p>The same numbers professionals watch, each with one plain sentence. They follow the candle size chosen on the chart.</p></div></div>
   <div class="pro-cards" id="readout"></div>
   <p class="note">Scores and readings are AlphaStrats' own calculations. They describe what the chart shows now; they are not predictions and not financial advice. New to this? <a class="lnk" href="learn.html">Read the one-line guide to every term</a>.</p>
@@ -71,13 +78,13 @@
 
 <script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="coin-logos.js?v=14"></script>
-<script src="common.js?v=14"></script>
-<script src="strategies.js?v=14"></script>
-<script src="strategy-view.js?v=14"></script>
-<script src="features.js?v=14"></script>
-<script src="terminal.js?v=14"></script>
-<script src="sentiment.js?v=14"></script>
-<script src="app.js?v=14"></script>
+<script src="coin-logos.js?v=15"></script>
+<script src="common.js?v=15"></script>
+<script src="strategies.js?v=15"></script>
+<script src="strategy-view.js?v=15"></script>
+<script src="features.js?v=15"></script>
+<script src="terminal.js?v=15"></script>
+<script src="sentiment.js?v=15"></script>
+<script src="app.js?v=15"></script>
 </body>
 </html>

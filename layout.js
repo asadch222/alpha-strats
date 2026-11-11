@@ -3,7 +3,7 @@
    market search and price strip on pages that do not load market data. */
 (function () {
   const page = document.body.dataset.page || '', live = document.body.dataset.live !== 'off';
-  const links = [['premium', 'premium.html', 'Premium'], ['markets', 'markets.html', 'Markets'], ['chart', 'chart.html', 'Charts'], ['tools', 'tools.html', 'Scanner'], ['sentiment', 'sentiment.html', 'Sentiment'], ['learn', 'learn.html', 'Learn']];
+  const links = [['premium', 'premium.html', 'Premium'], ['markets', 'markets.html', 'Markets'], ['heatmaps', 'heatmaps.html', 'Heatmaps'], ['chart', 'chart.html', 'Charts'], ['tools', 'tools.html', 'Scanner'], ['sentiment', 'sentiment.html', 'Sentiment'], ['learn', 'learn.html', 'Learn']];
   const brand = '<a class="brand" href="index.html"><span class="wm">ALPHA<i></i>STRATS</span></a>';
   const search = `<div class="search" id="search">
       <svg viewBox="0 0 20 20" class="search-ico"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13.5 13.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>

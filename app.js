@@ -167,7 +167,7 @@ async function loadMarkets() {
     } else if (s.contractType === 'PERPETUAL' && s.underlyingType === 'COIN') {
       if (STABLES.has(t)) continue;
       const base = coinName(t);
-      a = { t, ico: base, kind: 'crypto', sub: 'Crypto', name: NAMES[base] || '' };
+      a = { t, ico: base, kind: 'crypto', sub: 'Crypto', name: NAMES[base] || '', cat: (s.underlyingSubType || [])[0] };
     } else continue;
     Object.assign(a, { id: 'p:' + s.symbol, sym: s.symbol, src: 'perp', listed: s.onboardDate });
     setTicker(a, +r.lastPrice, +r.openPrice, +r.highPrice, +r.lowPrice, +r.quoteVolume);
@@ -854,6 +854,7 @@ function start() {
   if (has('heat')) { initHeat(); paintHeat(); }
   if (has('cmpChart')) initCompare();
   if (has('fundLong')) initFunding();
+  if (has('hmap')) initHeatPage();
   if (has('tradesList')) initTerminal();
   if (has('sentGauge')) initSentiment();
   if (has('priceChart') || has('btStrats')) select(A.has(q.get('m')) ? q.get('m') : A.has('p:BTCUSDT') ? 'p:BTCUSDT' : all().sort(byVol)[0].id, false);

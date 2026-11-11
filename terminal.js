@@ -260,12 +260,71 @@ function paintBotLive() { // the parts of the bot that move every second
   setHTML('mbPress', `<div class="split"><i style="width:${pct}%"></i><u></u></div><div class="split-lbl"><span class="up">Buyers ${pct.toFixed(0)}%</span><span class="down">Sellers ${(100 - pct).toFixed(0)}%</span></div>`);
 }
 
+/* ---------- performance tiles, money-flow donut, daily bars ---------- */
+const perf = { nb: null, oi: null };
+function barLineChart(id, barFmt) {
+  const c = LW.createChart($(id), { ...chartBase, handleScroll: false, handleScale: false, leftPriceScale: { visible: true, borderColor: '#e6eaf0' }, timeScale: { ...chartBase.timeScale, timeVisible: false } });
+  return { c, bars: c.addHistogramSeries({ priceScaleId: 'left', priceFormat: { type: 'custom', formatter: barFmt, minMove: 1 }, priceLineVisible: false, lastValueVisible: false }), line: c.addLineSeries({ color: '#0b1220', lineWidth: 2, priceLineVisible: false, lastValueVisible: false }) };
+}
+async function loadPerf(a) {
+  setT('perfTitle', `${a.t} price performance`);
+  const money = (v) => (v < 0 ? '-' : '') + fmtVol(Math.abs(v));
+  // 1) performance tiles from daily candles
+  fetchKlines(a, '1d', 366).then((k) => {
+    if (pro.a !== a) return;
+    const c = k.map((x) => x.c), n = c.length, yStart = k.findIndex((x) => new Date(x.t).getUTCFullYear() === new Date().getUTCFullYear());
+    const tile = (label, back) => {
+      if (back == null || back < 1 || back >= n) return `<div class="ptile na"><small>${label}</small><b>–</b><em>Not listed that long</em></div>`;
+      const seg = c.slice(n - 1 - back), chg = (seg[seg.length - 1] / seg[0] - 1) * 100;
+      return `<div class="ptile"><div><small>${label}</small><b class="${cls(chg)}">${fmtPct(chg)}</b></div>${sparkSVG(seg, 120, 44, true)}</div>`;
+    };
+    $('perfTiles').innerHTML = tile('7 days', 7) + tile('30 days', 30) + tile('90 days', 90) + tile('180 days', 180) + tile('This year', yStart >= 0 && yStart < n - 1 ? n - 1 - yStart : null) + tile('1 year', 365);
+    const price = k.slice(-31).map((x) => ({ time: Math.floor(x.t / 864e5) * 86400, value: x.c }));
+    if (!LW) return;
+    // 2) net buying per day
+    getJSON(`${API.perp.data}/takerlongshortRatio?symbol=${a.sym}&period=1d&limit=30`).then((rows) => {
+      if (pro.a !== a) return;
+      if (!perf.nb) perf.nb = barLineChart('nbChart', money);
+      const px = new Map(k.map((x) => [Math.floor(x.t / 864e5), x.c]));
+      const pts = rows.map((r) => { const d = Math.floor(r.timestamp / 864e5), v = (+r.buyVol - +r.sellVol) * (px.get(d) || a.price); return { time: d * 86400, value: v, color: v >= 0 ? 'rgba(10,157,108,.75)' : 'rgba(229,72,77,.75)' }; });
+      perf.nb.bars.setData(pts); perf.nb.line.setData(price.filter((p) => pts.length && p.time >= pts[0].time)); perf.nb.c.timeScale().fitContent();
+      const sum = pts.reduce((s, p) => s + p.value, 0);
+      $('nbNow').innerHTML = pts.length ? `<span class="${cls(sum)}">${money(sum)} net over ${pts.length} days</span>` : '';
+    }).catch(() => {});
+    // 3) open interest per day
+    getJSON(`${API.perp.data}/openInterestHist?symbol=${a.sym}&period=1d&limit=30`).then((rows) => {
+      if (pro.a !== a) return;
+      if (!perf.oi) perf.oi = barLineChart('oiChart', (v) => fmtVol(v));
+      const pts = rows.map((r) => ({ time: Math.floor(r.timestamp / 864e5) * 86400, value: +r.sumOpenInterestValue, color: 'rgba(247,147,26,.7)' }));
+      perf.oi.bars.setData(pts); perf.oi.line.setData(price.filter((p) => pts.length && p.time >= pts[0].time)); perf.oi.c.timeScale().fitContent();
+      if (pts.length > 1) { const d = (pts[pts.length - 1].value / pts[0].value - 1) * 100; $('oiNow').innerHTML = `<span class="${cls(d)}">${fmtPct(d, 1)} in ${pts.length} days</span>`; }
+    }).catch(() => {});
+  }).catch(() => { setHTML('perfTiles', '<div class="skeleton">No history available.</div>'); });
+  // 4) money flow by order size, from the latest 1,000 trades
+  getJSON(`${API.perp.rest}/aggTrades?symbol=${a.sym}&limit=1000`).then((rows) => {
+    if (pro.a !== a || !rows.length) return;
+    const tr = rows.map((r) => ({ usd: +r.p * +r.q, buy: !r.m })), sorted = tr.map((x) => x.usd).sort((x, y) => x - y);
+    const p50 = sorted[Math.floor(sorted.length * 0.5)], p95 = sorted[Math.floor(sorted.length * 0.95)];
+    const b = { in: [0, 0, 0], out: [0, 0, 0] };
+    for (const x of tr) b[x.buy ? 'in' : 'out'][x.usd >= p95 ? 0 : x.usd >= p50 ? 1 : 2] += x.usd;
+    const tin = b.in.reduce((s, v) => s + v, 0), tout = b.out.reduce((s, v) => s + v, 0), tot = tin + tout || 1, net = tin - tout;
+    const segs = [[b.in[0], '#0a9d6c'], [b.in[1], '#3fc79a'], [b.in[2], '#9be3c9'], [b.out[2], '#f7b5b7'], [b.out[1], '#ee7b7f'], [b.out[0], '#e5484d']];
+    let off = 0; const C = 2 * Math.PI * 54;
+    const arcs = segs.map(([v, col]) => { const len = (v / tot) * C, s = `<circle cx="70" cy="70" r="54" fill="none" stroke="${col}" stroke-width="20" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 70 70)"/>`; off += len; return s; }).join('');
+    const names = ['Large orders', 'Medium orders', 'Small orders'], row = (v, col, name) => `<div class="fl-row"><i style="background:${col}"></i><span>${name}</span><b class="mono">${fmtVol(v)}</b><em>${((v / tot) * 100).toFixed(1)}%</em></div>`;
+    $('flowBox').innerHTML = `<div class="fl-col"><div class="fl-head"><small>Money in (buys)</small><b class="mono up">${fmtVol(tin)}</b></div>${[0, 1, 2].map((i) => row(b.in[i], segs[i][1], names[i])).join('')}</div>
+      <div class="fl-donut"><svg viewBox="0 0 140 140">${arcs}</svg><div><b class="mono ${cls(net)}">${money(net)}</b><small>Net flow</small></div></div>
+      <div class="fl-col"><div class="fl-head"><small>Money out (sells)</small><b class="mono down">${fmtVol(tout)}</b></div>${[0, 1, 2].map((i) => row(b.out[i], segs[5 - i][1], names[i])).join('')}</div>`;
+  }).catch(() => setHTML('flowBox', '<div class="skeleton">No recent trades.</div>'));
+}
+
 /* ---------- start ---------- */
 function onMarketSelect(a) {
   pro.a = a; pro.mark = pro.index = pro.fund = pro.oi = null; pro.trades = [];
   paintProHead(); paintTrades(); connectPro(a); loadTrades(a); pollOI(); togglePick(false);
   if (pro.tab === 'info') paintInfo();
   if (pro.tab === 'data') loadTradingData();
+  if (has('perfTiles')) loadPerf(a);
 }
 function initTerminal() {
   segment($('proTabs'), (d) => { pro.tab = d.tab; ['chart', 'info', 'data'].forEach((t) => { $('tab-' + t).hidden = t !== d.tab; }); if (d.tab === 'info') paintInfo(); if (d.tab === 'data') loadTradingData(); });
