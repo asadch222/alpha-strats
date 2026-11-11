@@ -17,7 +17,7 @@ const PIPE = (() => {
     g1: 'only trade with the trend', g2: 'do not chase a hot move', g3: 'only strong setups pass',
     vGood: 'the rules like this market', vWatch: 'close, but not yet', vBad: 'the rules say stay out',
   };
-  const TONE = { good: ['#b4ff39', 'PASS'], watch: ['#ffb224', 'WATCH'], bad: ['#ff4d6a', 'FAIL'] };
+  const TONE = { good: ['#0a9d6c', 'PASS'], watch: ['#f08c00', 'WATCH'], bad: ['#e5484d', 'FAIL'] };
   const LINKS = [ // which box feeds which
     ['price', 'trend'], ['bars', 'trend'], ['bars', 'rsi'], ['price', 'dd'], ['bars', 'dd'], ['vol', 'volr'], ['chg', 'brk'], ['price', 'brk'],
     ['trend', 'score'], ['rsi', 'score'], ['dd', 'score'], ['volr', 'score'], ['brk', 'score'], ['rsi', 'mood'], ['trend', 'mood'],
@@ -65,19 +65,19 @@ const PIPE = (() => {
   function drawBackground() {
     bg = document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height;
     const g = bg.getContext('2d'); g.scale(dpr, dpr);
-    g.strokeStyle = 'rgba(255,255,255,.035)'; g.lineWidth = 1; // floor grid
+    g.strokeStyle = 'rgba(11,18,32,.045)'; g.lineWidth = 1; // floor grid
     for (let x = 0; x <= W; x += 50) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); }
     for (let y = 0; y <= H; y += 50) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
-    const tint = ['rgba(150,190,255,', 'rgba(255,255,255,', 'rgba(255,120,190,'];
+    const tint = ['rgba(60,100,210,', 'rgba(11,18,32,', 'rgba(230,90,150,'];
     for (let ci = 0; ci < COLS.length - 1; ci++) {
       COLS[ci].nodes.forEach(([a], i) => COLS[ci + 1].nodes.forEach(([b], j) => {
         const c = curve(a, b); allPairs.push(c);
-        g.strokeStyle = tint[(i + j + ci) % 3] + '.13)'; g.lineWidth = 1;
+        g.strokeStyle = tint[(i + j + ci) % 3] + '.14)'; g.lineWidth = 1;
         g.beginPath(); g.moveTo(c[0], c[1]); g.bezierCurveTo(c[2], c[3], c[4], c[5], c[6], c[7]); g.stroke();
       }));
       const gx = COLS[ci].x + NW + (COLS[ci + 1].x - COLS[ci].x - NW) / 2; // bright bundle of wires between two columns
       for (let k = 0; k < 4; k++) {
-        g.strokeStyle = tint[k % 3] + (k ? '.16)' : '.5)'); g.lineWidth = k ? 1 : 1.4;
+        g.strokeStyle = tint[k % 3] + (k ? '.16)' : '.32)'); g.lineWidth = k ? 1 : 1.4;
         g.beginPath(); g.moveTo(gx + (k - 1.5) * 5, 0);
         for (let y = 0; y <= H; y += 40) g.lineTo(gx + (k - 1.5) * 5 + Math.sin(y / 70 + k * 2 + ci) * (4 + k * 3), y);
         g.stroke();
@@ -104,7 +104,7 @@ const PIPE = (() => {
     const n = N[id], v = n.el.querySelector('[data-v]');
     if (val) { v.textContent = val[0]; v.className = val[1] === true ? 'ok' : val[1] === false ? 'no' : ''; }
     n.el.style.setProperty('--c', color); n.el.classList.add('on');
-    cam.tx = n.x + n.w / 2 + 90; cam.ty = n.y + n.h / 2;
+    cam.tx = n.x + n.w / 2; cam.ty = n.y + n.h / 2;
     ring = { x: n.x + n.w - 26, y: n.y + n.h / 2, t: performance.now(), color };
     checks++; setT('pipeChecks', checks.toLocaleString());
   }
@@ -202,15 +202,14 @@ const PIPE = (() => {
   function glow(c, upTo, color) {
     ctx.beginPath();
     for (let i = 0; i <= 26; i++) { const p = at(c, (i / 26) * upTo); if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }
-    ctx.strokeStyle = color; ctx.globalAlpha = 0.1; ctx.lineWidth = 16; ctx.stroke();
+    ctx.strokeStyle = color; ctx.globalAlpha = 0.09; ctx.lineWidth = 16; ctx.stroke();
     ctx.globalAlpha = 0.22; ctx.lineWidth = 7; ctx.stroke();
     ctx.globalAlpha = 0.95; ctx.lineWidth = 2.2; ctx.stroke();
-    ctx.strokeStyle = '#fff'; ctx.globalAlpha = 0.7; ctx.lineWidth = 0.8; ctx.stroke();
     ctx.globalAlpha = 1;
   }
   function dot(x, y, r, color, a) {
     const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, '#fff'); g.addColorStop(0.25, color); g.addColorStop(1, 'transparent');
+    g.addColorStop(0, color); g.addColorStop(0.3, color); g.addColorStop(1, color + '00');
     ctx.globalAlpha = a; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
   }
   function frame(now) {
@@ -218,18 +217,17 @@ const PIPE = (() => {
     if (!visible || !ready) return;
     // camera: glide towards the box being checked, with a slow sway
     const sw = stage.clientWidth, sh = stage.clientHeight;
-    cam.s = clamp(sw / 1180, 0.56, 0.98);
+    const phone = sw < 620; cam.s = phone ? 0.86 : clamp(sw / 1180, 0.62, 0.98);
     const halfW = sw / cam.s / 2, halfH = sh / cam.s / 2;
-    const tx = halfW >= W / 2 ? W / 2 : clamp(cam.tx, halfW - 30, W - halfW + 30), ty = halfH >= H / 2 ? H / 2 : clamp(cam.ty, halfH - 20, H - halfH + 20);
+    const tx = halfW >= W / 2 ? W / 2 : clamp(cam.tx + (phone ? -24 : 90), halfW - 30, W - halfW + 30), ty = halfH >= H / 2 ? H / 2 : clamp(cam.ty, halfH - 20, H - halfH + 20);
     cam.x += (tx - cam.x) * 0.045; cam.y += (ty - cam.y) * 0.045;
     const sway = still ? 0 : Math.sin(now / 5200);
-    world.style.transform = `rotateX(${still ? 0 : 9 + sway * 2}deg) rotateY(${still ? 0 : -7 + sway * 5}deg) scale(${cam.s}) translate(${-cam.x}px,${-cam.y}px)`;
+    world.style.transform = `rotateX(${still ? 0 : phone ? 5 : 9 + sway * 2}deg) rotateY(${still ? 0 : phone ? -3 + sway * 2 : -7 + sway * 5}deg) scale(${cam.s}) translate(${-cam.x}px,${-cam.y}px)`;
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     ctx.drawImage(bg, 0, 0, W, H);
-    ctx.globalCompositeOperation = 'lighter';
-    sparks.forEach((s, i) => { s.t += s.v; if (s.t > 1) sparks[i] = newSpark(), sparks[i].t = 0; const p = at(s.c, s.t); dot(p[0], p[1], s.r * 3, '#cfe0ff', 0.55); });
+    sparks.forEach((s, i) => { s.t += s.v; if (s.t > 1) sparks[i] = newSpark(), sparks[i].t = 0; const p = at(s.c, s.t); dot(p[0], p[1], s.r * 3, '#6f83b5', 0.5); });
     edges.forEach((e) => {
       const k = clamp((now - e.t0) / 330, 0, 1);
       glow(e.c, k, e.color);
@@ -240,7 +238,6 @@ const PIPE = (() => {
       if (k < 1) { ctx.strokeStyle = ring.color; ctx.globalAlpha = 1 - k; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ring.x, ring.y, 10 + k * 46, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
       dot(ring.x, ring.y, 16, ring.color, Math.max(0.35, 1 - k));
     }
-    ctx.globalCompositeOperation = 'source-over';
   }
 
   function init() {
