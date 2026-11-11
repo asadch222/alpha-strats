@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All markets — AlphaStrats</title>
+<meta name="description" content="Live prices for every crypto coin, tokenised stock and commodity, with a watchlist and fear and greed score.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=10">
+</head>
+<body data-page="markets">
+<script src="layout.js?v=10"></script>
+
+<main id="top">
+<section class="phero small">
+  <p class="eyebrow">Live markets</p>
+  <h1>Every market, live.</h1>
+  <p class="lede">Tap any row to open that market's own page with its chart, mood score and a plain-English reading. Tap ★ to save it to your watchlist.</p>
+</section>
+<section id="markets" class="section tight">
+  <div class="section-head">
+    <div><h2>All markets</h2><p id="mktCount">Loading markets…</p></div>
+    <div class="mkt-tools">
+      <div class="seg" id="kindSeg">
+        <button class="is-active" data-kind="all">All</button><button data-kind="crypto">Crypto</button><button data-kind="stocks">Stocks</button><button data-kind="commodities">Commodities</button><button data-kind="watch">★ Watchlist</button>
+      </div>
+      <input id="mktFilter" class="filter" type="search" placeholder="Filter this list" autocomplete="off" aria-label="Filter markets">
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="mkt">
+      <thead><tr>
+        <th class="c-s">#</th>
+        <th data-sort="t">Asset</th>
+        <th class="num" data-sort="price">Price</th>
+        <th class="num" data-sort="chg">24h</th>
+        <th class="c-m">24h range</th>
+        <th class="num c-s" data-sort="vol">Volume</th>
+        <th class="c-m">7 days</th>
+        <th class="c-s">Fear / greed</th>
+        <th>Setup</th>
+      </tr></thead>
+      <tbody id="mktBody"></tbody>
+    </table>
+  </div>
+  <div class="pager" id="pager"></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="common.js?v=10"></script>
+<script src="strategies.js?v=10"></script>
+<script src="strategy-view.js?v=10"></script>
+<script src="features.js?v=10"></script>
+<script src="terminal.js?v=10"></script>
+<script src="sentiment.js?v=10"></script>
+<script src="app.js?v=10"></script>
+</body>
+</html>

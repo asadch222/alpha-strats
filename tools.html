@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scanner, compare and backtests — AlphaStrats</title>
+<meta name="description" content="Scan the most active markets for setups, compare two markets and backtest strategies in your browser.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=10">
+</head>
+<body data-page="tools">
+<script src="layout.js?v=10"></script>
+
+<main id="top">
+<section class="phero small">
+  <p class="eyebrow">Tools</p>
+  <h1>Find setups. Test ideas.</h1>
+  <p class="lede">Three tools on one page: a scanner that looks for opportunities, a chart that compares two markets, and a lab that tests strategies on real history.</p>
+</section>
+<section id="scanner" class="section">
+  <div class="section-head">
+    <div>
+      <h2>Buying-opportunity scanner</h2>
+      <p>The 60 most active markets, scanned by one rule set: trend (EMA 20 vs EMA 50), momentum (RSI 14), new highs and volume. Pick what to look for and the candle size.</p>
+    </div>
+    <div class="mkt-tools">
+      <div class="seg" id="oppMode"><button class="is-active" data-mode="best">Best setups</button><button data-mode="breakout">Breakouts</button><button data-mode="volume">Unusual volume</button><button data-mode="oversold">Oversold</button></div>
+      <div class="seg" id="oppTf"><button data-tf="15m">15m</button><button class="is-active" data-tf="1h">1H</button><button data-tf="4h">4H</button><button data-tf="1d">1D</button></div>
+      <div class="seg" id="oppSeg"><button class="is-active" data-kind="all">All</button><button data-kind="crypto">Crypto</button><button data-kind="stocks">Stocks</button></div>
+    </div>
+  </div>
+  <p class="stamp" id="scanStamp" style="margin:-8px 0 14px"></p>
+  <div class="cards" id="oppCards"></div>
+  <p class="note">A setup score describes how closely current price action matches a rule set. It is not a prediction and not financial advice.</p>
+</section>
+
+<section id="compare" class="section">
+  <div class="section-head">
+    <div><h2>Compare two markets</h2><p>See which one did better over the same period, in percentage terms.</p></div>
+    <div class="seg" id="cmpSeg"><button data-p="1W">1 week</button><button class="is-active" data-p="1M">1 month</button><button data-p="3M">3 months</button><button data-p="1Y">1 year</button></div>
+  </div>
+  <div class="panel cmp">
+    <div class="cmp-top">
+      <div class="cmp-pick"><label for="cmpA">First market</label><input id="cmpA" class="filter" autocomplete="off" spellcheck="false"><div class="search-results" id="cmpABox" hidden></div></div>
+      <span class="cmp-vs">vs</span>
+      <div class="cmp-pick"><label for="cmpB">Second market</label><input id="cmpB" class="filter" autocomplete="off" spellcheck="false"><div class="search-results" id="cmpBBox" hidden></div></div>
+      <div class="cmp-result" id="cmpResult"></div>
+    </div>
+    <div class="cmp-area"><div id="cmpChart"></div></div>
+    <p class="note" id="cmpNote"></p>
+  </div>
+</section>
+
+<section id="backtest" class="section">
+  <div class="section-head">
+    <div><h2>Backtest lab</h2><p>Runs in your browser on real historical candles, with fees, entering on the next bar's open. Search for any market below.</p></div>
+  </div>
+  <div class="lab">
+    <div class="panel lab-controls">
+      <div class="lab-asset" id="btAsset"></div>
+      <div class="cmp-pick"><input id="btQ" class="filter" type="search" placeholder="Change market: search coin or stock" autocomplete="off" spellcheck="false" aria-label="Choose a market to test"><div class="search-results" id="btQBox" hidden></div></div>
+      <label>Timeframe
+        <select id="btTf"><option value="1h">1 hour</option><option value="4h" selected>4 hours</option><option value="1d">1 day</option></select>
+      </label>
+      <div class="strats" id="btStrats"></div>
+      <p class="strat-desc" id="btDesc"></p>
+    </div>
+    <div class="panel lab-result">
+      <div class="metrics" id="btMetrics"></div>
+      <div class="chart-legend"><span><i class="sw" style="background:var(--accent)"></i>Strategy</span><span><i class="sw" style="background:#94a3b8"></i>Buy &amp; hold</span></div>
+      <div class="eq-area"><div id="eqChart"></div></div>
+      <p class="note" id="btNote"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="common.js?v=10"></script>
+<script src="strategies.js?v=10"></script>
+<script src="strategy-view.js?v=10"></script>
+<script src="features.js?v=10"></script>
+<script src="terminal.js?v=10"></script>
+<script src="sentiment.js?v=10"></script>
+<script src="app.js?v=10"></script>
+</body>
+</html>

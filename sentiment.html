@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market mood: fear and greed — AlphaStrats</title>
+<meta name="description" content="Fear and greed for the whole crypto market and for each coin and stock, plus long versus short positioning.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=10">
+</head>
+<body data-page="sentiment">
+<script src="layout.js?v=10"></script>
+
+<main id="top">
+<section class="phero small">
+  <p class="eyebrow">Sentiment</p>
+  <h1>How is the market feeling?</h1>
+  <p class="lede">Prices move on emotion as much as facts. This page shows whether traders are scared or greedy, and which way they are betting.</p>
+</section>
+<section class="section tight">
+  <div class="sent-top">
+    <div class="panel sent-gauge"><small class="cap">Crypto market fear &amp; greed · today</small><div id="sentGauge"><div class="skeleton">Loading…</div></div><p id="sentWords"></p></div>
+    <div class="panel sent-hist"><h3>Last 30 days</h3><p class="sub">Below 25 is extreme fear, above 75 is extreme greed.</p><div class="sent-chart"><div id="sentChart"></div></div></div>
+  </div>
+  <p class="note">The index runs from 0 (extreme fear) to 100 (extreme greed). It is published once a day by Alternative.me and covers the crypto market as a whole.</p>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><h2>Mood by market</h2><p>Our own 0 to 100 mood score for each of the 60 most active markets, from momentum, trend, price position and volatility on 1-hour candles.</p></div></div>
+  <div class="fund">
+    <div class="panel fund-box"><h3><span class="badge bad">Most fearful</span> Traders are selling these</h3><div id="moodFear"><div class="skeleton">Scanning…</div></div></div>
+    <div class="panel fund-box"><h3><span class="badge good">Most greedy</span> Traders are chasing these</h3><div id="moodGreed"><div class="skeleton">Scanning…</div></div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><h2>Who is betting which way</h2><p>For the biggest coins: the share of traders betting on a rise against those betting on a fall, right now. When almost everyone agrees, the surprise is usually the other way.</p></div></div>
+  <div class="panel ls" id="lsList"><div class="skeleton">Loading…</div></div>
+</section>
+<section id="funding" class="section">
+  <div class="section-head">
+    <div><h2>Funding rates and open interest</h2><p>Funding is the fee paid between traders holding long and short positions. A high positive rate means longs are crowded; a negative rate means shorts are. Open interest is the total value of positions still open.</p></div>
+    <div class="mkt-tools"><div class="seg" id="fundSeg"><button class="is-active" data-kind="all">All</button><button data-kind="crypto">Crypto</button><button data-kind="stocks">Stocks</button></div><span class="stamp" id="fundStamp"></span></div>
+  </div>
+  <div class="fund">
+    <div class="panel fund-box"><h3><span class="badge good">Crowded long</span> Longs are paying the most</h3><div id="fundLong"><div class="skeleton">Loading…</div></div></div>
+    <div class="panel fund-box"><h3><span class="badge bad">Crowded short</span> Shorts are paying the most</h3><div id="fundShort"><div class="skeleton">Loading…</div></div></div>
+  </div>
+  <p class="note">Rate shown is the latest rate per funding period (the period is 1, 4 or 8 hours depending on the market). Crowded positioning is context, not a signal on its own.</p>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="common.js?v=10"></script>
+<script src="strategies.js?v=10"></script>
+<script src="strategy-view.js?v=10"></script>
+<script src="features.js?v=10"></script>
+<script src="terminal.js?v=10"></script>
+<script src="sentiment.js?v=10"></script>
+<script src="app.js?v=10"></script>
+</body>
+</html>

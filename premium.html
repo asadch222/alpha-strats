@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Premium strategies — AlphaStrats</title>
+<meta name="description" content="AlphaStrats premium strategies with their complete backtested trade records.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=10">
+</head>
+<body data-page="premium" data-live="off">
+<script src="layout.js?v=10"></script>
+
+<main id="top">
+<section class="phero">
+  <p class="eyebrow gold">Premium strategies</p>
+  <h1>Our strongest strategies, with <em>every trade on the record</em>.</h1>
+  <p class="lede">These are the strategies that produced standout backtested results over the last few months. Nothing is hidden: open any one to see each entry, stop, exit and the account balance after it.</p>
+  <dl class="hero-stats" id="pgStats"></dl>
+</section>
+
+<section class="section tight">
+  <div class="pcards" id="stList"></div>
+</section>
+
+<section class="section tight" id="results">
+  <div id="stDetail"></div>
+</section>
+
+</main>
+
+<script>renderFooter()</script>
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="common.js?v=10"></script>
+<script src="strategies.js?v=10"></script>
+<script src="strategy-view.js?v=10"></script>
+<script>initStrategyPage();</script>
+
+</body>
+</html>

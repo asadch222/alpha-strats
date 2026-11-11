@@ -4,60 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AlphaStrats — Backtested crypto & stock strategies</title>
-<meta name="description" content="Backtested trading strategies for crypto and tokenised stocks, with live prices, charts, technical scans and in-browser backtests.">
+<meta name="description" content="Backtested trading strategies for crypto and tokenised stocks, with live prices, charts, market mood and plain-English explanations.">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
-<body>
-
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3df5b0"/><stop offset="1" stop-color="#19b7ff"/></linearGradient>
-    <symbol id="logo" viewBox="0 0 40 40">
-      <rect width="40" height="40" rx="11" fill="url(#logoGrad)"/>
-      <path d="M9.5 30 20 9.5 30.5 30" fill="none" stroke="#04130c" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M14.6 24.6 18.4 21 21.4 23.4 25.2 18.6" fill="none" stroke="#04130c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="25.2" cy="18.6" r="2.1" fill="#04130c"/>
-    </symbol>
-  </defs>
-</svg>
-
-<header class="nav">
-  <a class="brand" href="#top"><svg class="brand-mark"><use href="#logo"/></svg><span>Alpha<b>Strats</b></span></a>
-  <nav class="nav-links">
-    <a href="#overview">Overview</a>
-    <a href="#chart">Charts</a>
-    <a href="#markets">Markets</a>
-    <a href="#scanner">Opportunities</a>
-    <a href="#backtest">Backtests</a>
-  </nav>
-  <div class="search" id="search">
-    <svg viewBox="0 0 20 20" class="search-ico"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13.5 13.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <input id="q" type="search" placeholder="Search any coin or stock" autocomplete="off" spellcheck="false" aria-label="Search markets">
-    <kbd>/</kbd>
-    <div class="search-results" id="qResults" hidden></div>
-  </div>
-  <div class="nav-right">
-    <span class="feed-pill" id="feedPill"><i class="dot"></i><span id="feedText">Connecting</span></span>
-    <a class="btn btn-primary btn-sm" href="#pricing">Get strategies</a>
-  </div>
-</header>
-
-<div class="tape" aria-hidden="true"><div class="tape-track" id="tape"></div></div>
+<body data-page="home">
+<script src="layout.js?v=10"></script>
 
 <main id="top">
-
 <section class="hero">
   <div class="hero-copy">
-    <p class="eyebrow">Crypto · Tokenised stocks · Technical analysis</p>
-    <h1>Strategies that are <em>tested on real data</em> before you trade them.</h1>
-    <p class="lede">AlphaStrats sells rule-based trading strategies for crypto and tokenised stocks. Every strategy ships with its backtest, and the scanners on this page run on live market prices right now.</p>
+    <p class="eyebrow">Crypto · Tokenised stocks</p>
+    <h1>Tested strategies.<br><em>Every trade shown.</em></h1>
+    <p class="lede">Rule-based trading strategies, published with their full backtest.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#backtest">Run a live backtest</a>
-      <a class="btn btn-ghost" href="#scanner">See today's setups</a>
+      <a class="btn btn-primary" href="premium.html">See premium results</a>
+      <a class="btn btn-ghost" href="markets.html">Explore live markets</a>
     </div>
     <dl class="hero-stats">
       <div><dt id="statMarkets">–</dt><dd>markets tracked live</dd></div>
@@ -66,18 +31,59 @@
     </dl>
   </div>
 
-  <div class="console" aria-label="Bot activity console">
-    <div class="console-head">
-      <span class="lights"><i></i><i></i><i></i></span>
-      <span class="console-title">bots / live activity</span>
-      <span class="console-clock" id="clock"></span>
+  <div class="flow" id="flow" aria-label="How a strategy turns live prices into results">
+    <svg class="flow-wires" id="flowWires" aria-hidden="true"></svg>
+    <div class="flow-col">
+      <div class="fcard" id="fA">
+        <span class="fstep"><b>1</b>Live prices</span>
+        <div id="flowPrices" class="frows"></div>
+        <footer><i class="dot" id="botFeedDot"></i><b id="botFeed">–</b> updates a second</footer>
+      </div>
+      <div class="fcard" id="fB">
+        <span class="fstep"><b>2</b>Trend scan</span>
+        <div id="flowScan" class="fscan">Scanning…</div>
+        <footer><i class="dot" id="botScanDot"></i><b id="botScan">–</b> markets analysed</footer>
+      </div>
     </div>
-    <div class="bots">
-      <div class="bot"><span class="bot-name"><i class="dot" id="botFeedDot"></i>Price feed</span><b id="botFeed">–</b><small>updates / sec</small></div>
-      <div class="bot"><span class="bot-name"><i class="dot" id="botScanDot"></i>Scanner</span><b id="botScan">–</b><small>markets analysed</small></div>
-      <div class="bot"><span class="bot-name"><i class="dot" id="botBtDot"></i>Backtester</span><b id="botBt">0</b><small>runs this session</small></div>
+    <div class="fengine" id="fE">
+      <span class="fstep"><b>3</b>Strategy decides</span>
+      <div class="fgear"><span></span></div>
+      <div id="flowEngine"></div>
+      <footer><i class="dot" id="botBtDot"></i><b id="botBt">0</b> backtests run</footer>
     </div>
-    <div class="log" id="log" role="log"></div>
+    <div class="flow-col">
+      <div class="fcard" id="fC">
+        <span class="fstep"><b>4</b>Trades</span>
+        <div id="flowTrades" class="frows"></div>
+      </div>
+      <div class="fcard fresult" id="fD">
+        <span class="fstep"><b>5</b>Result</span>
+        <div id="flowResult"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="premium" class="section">
+  <div class="section-head">
+    <div><p class="eyebrow gold">Premium strategies</p><h2>Our strongest results from the last few months</h2><p>Each premium strategy is published with its complete backtest: every entry, stop, exit and the account balance after it.</p></div>
+    <a class="btn btn-ghost" href="premium.html">Open premium page</a>
+  </div>
+  <div class="pcards" id="premiumCards"></div>
+  <p class="note">Backtested results, not live trading. Past performance does not guarantee future results.</p>
+</section>
+
+<section id="explore" class="section">
+  <div class="section-head">
+    <div><h2>Every market in one place</h2><p>Crypto, tokenised stocks and commodities, priced live and charted with the same tools.</p></div>
+  </div>
+  <div class="bento">
+    <div class="bento-nav" id="bentoNav"></div>
+    <div class="bento-main">
+      <div class="bento-feature" id="bentoFeature"></div>
+      <div class="bento-tile" id="bentoMovers"></div>
+      <div class="bento-tile" id="bentoGrid"></div>
+    </div>
   </div>
 </section>
 
@@ -86,6 +92,12 @@
     <div><h2>Market overview</h2><p>What is moving right now across every market we track.</p></div>
   </div>
   <div class="breadth" id="breadth"></div>
+  <div class="panel heat-panel">
+    <header><div><h3>Market heatmap</h3><p>Bigger tile, more trading volume. Greener is up over 24 hours, redder is down. Tap a tile to chart it.</p></div>
+      <div class="seg" id="heatSeg"><button class="is-active" data-kind="stocks">Stocks</button><button data-kind="crypto">Crypto</button></div></header>
+    <div class="heat" id="heat"></div>
+    <div class="heat-legend"><span id="heatLo"></span><i></i><span id="heatHi"></span><em>24-hour change</em></div>
+  </div>
   <div class="dash">
     <article class="panel feature" id="feature"></article>
     <article class="panel movers" data-movers="stocks">
@@ -99,94 +111,18 @@
   </div>
 </section>
 
-<section id="chart" class="section">
-  <div class="section-head">
-    <div><h2>Chart terminal</h2><p>Live candles with EMA 20 and EMA 50. Search or click any market to load it here.</p></div>
-  </div>
-  <div class="terminal">
-    <div class="panel term-main">
-      <div class="term-head" id="termHead"></div>
-      <div class="term-bar">
-        <div class="seg" id="tfSeg">
-          <button data-tf="15m">15m</button><button data-tf="1h" class="is-active">1H</button><button data-tf="4h">4H</button><button data-tf="1d">1D</button><button data-tf="1w">1W</button>
-        </div>
-        <div class="chart-legend"><span><i class="sw" style="background:#ffc24d"></i>EMA 20</span><span><i class="sw" style="background:#7aa8ff"></i>EMA 50</span><span class="ohlc" id="ohlc"></span></div>
-      </div>
-      <div class="chart-area"><div id="priceChart"></div><div class="chart-msg" id="chartMsg" hidden></div></div>
-    </div>
-    <aside class="panel term-side">
-      <h3>Technical readout</h3>
-      <div id="readout"></div>
-      <a class="btn btn-ghost btn-block" href="#backtest">Backtest this market</a>
-    </aside>
+<section id="pages" class="section">
+  <div class="section-head"><div><h2>Everything you can do here</h2><p>Each tool has its own page and explains itself in plain words.</p></div></div>
+  <div class="tool-cards">
+    <a class="panel tool" href="chart.html"><span class="tool-ico">📈</span><h3>A page for every market</h3><p>Open any coin or stock to get its live chart, mood score, trades and a plain-English reading.</p><b>Open charts →</b></a>
+    <a class="panel tool" href="markets.html"><span class="tool-ico">🗂️</span><h3>All markets</h3><p>Every coin, tokenised stock and commodity in one sortable list, with your own watchlist.</p><b>Browse markets →</b></a>
+    <a class="panel tool" href="tools.html"><span class="tool-ico">🔎</span><h3>Scanner and backtests</h3><p>Find breakouts, unusual activity and oversold markets, compare two markets, and test strategies.</p><b>Open scanner →</b></a>
+    <a class="panel tool" href="sentiment.html"><span class="tool-ico">🧭</span><h3>Market mood</h3><p>Fear and greed for the whole market and for each coin, plus where traders are crowded.</p><b>See sentiment →</b></a>
+    <a class="panel tool" href="learn.html"><span class="tool-ico">🎓</span><h3>Learn the words</h3><p>Every term on this site explained in one simple line. No experience needed.</p><b>Open the guide →</b></a>
+    <a class="panel tool tool-prem" href="premium.html"><span class="tool-ico">👑</span><h3>Premium strategies</h3><p>Our strongest backtested strategies, with every trade on the record.</p><b>See results →</b></a>
   </div>
 </section>
 
-<section id="markets" class="section">
-  <div class="section-head">
-    <div><h2>All markets</h2><p id="mktCount">Loading markets…</p></div>
-    <div class="mkt-tools">
-      <div class="seg" id="kindSeg">
-        <button class="is-active" data-kind="all">All</button><button data-kind="crypto">Crypto</button><button data-kind="stocks">Stocks</button><button data-kind="commodities">Commodities</button>
-      </div>
-      <input id="mktFilter" class="filter" type="search" placeholder="Filter this list" autocomplete="off" aria-label="Filter markets">
-    </div>
-  </div>
-  <div class="table-wrap">
-    <table class="mkt">
-      <thead><tr>
-        <th class="c-s">#</th>
-        <th data-sort="t">Asset</th>
-        <th class="num" data-sort="price">Price</th>
-        <th class="num" data-sort="chg">24h</th>
-        <th class="c-m">24h range</th>
-        <th class="num c-s" data-sort="vol">Volume</th>
-        <th class="c-m">7 days</th>
-        <th class="num c-s">RSI</th>
-        <th>Setup</th>
-      </tr></thead>
-      <tbody id="mktBody"></tbody>
-    </table>
-  </div>
-  <div class="pager" id="pager"></div>
-</section>
-
-<section id="scanner" class="section">
-  <div class="section-head">
-    <div>
-      <h2>Buying-opportunity scanner</h2>
-      <p>The most active markets ranked by one rule set: trend (EMA 20 vs EMA 50), momentum (RSI 14) and distance from the recent high, on 1-hour candles.</p>
-    </div>
-    <div class="mkt-tools">
-      <div class="seg" id="oppSeg"><button class="is-active" data-kind="all">All</button><button data-kind="crypto">Crypto</button><button data-kind="stocks">Stocks</button></div>
-      <span class="stamp" id="scanStamp"></span>
-    </div>
-  </div>
-  <div class="cards" id="oppCards"></div>
-  <p class="note">A setup score describes how closely current price action matches a rule set. It is not a prediction and not financial advice.</p>
-</section>
-
-<section id="backtest" class="section">
-  <div class="section-head">
-    <div><h2>Backtest lab</h2><p>Runs in your browser on real historical candles, with fees, entering on the next bar's open. Pick any market from search or the table.</p></div>
-  </div>
-  <div class="lab">
-    <div class="panel lab-controls">
-      <div class="lab-asset" id="btAsset"></div>
-      <label>Timeframe
-        <select id="btTf"><option value="1h">1 hour</option><option value="4h" selected>4 hours</option><option value="1d">1 day</option></select>
-      </label>
-      <div class="strats" id="btStrats"></div>
-      <p class="strat-desc" id="btDesc"></p>
-    </div>
-    <div class="panel lab-result">
-      <div class="metrics" id="btMetrics"></div>
-      <div class="chart-legend"><span><i class="sw" style="background:var(--accent)"></i>Strategy</span><span><i class="sw" style="background:#5b6a80"></i>Buy &amp; hold</span></div>
-      <div class="eq-area"><div id="eqChart"></div></div>
-      <p class="note" id="btNote"></p>
-    </div>
-  </div>
-</section>
 
 <section id="pricing" class="section">
   <div class="section-head">
@@ -203,7 +139,7 @@
       <span class="tag">Most popular</span>
       <h3>Pro</h3>
       <p class="price">$79<small>/month</small></p>
-      <ul><li>Every strategy, crypto and stocks</li><li>New technical-analysis releases</li><li>Daily buying-opportunity alerts</li><li>Parameter files for your own testing</li></ul>
+      <ul><li>Every premium strategy with exact rules</li><li>New technical-analysis releases</li><li>Daily buying-opportunity alerts</li><li>Parameter files for your own testing</li></ul>
       <a class="btn btn-primary" href="#contact">Choose Pro</a>
     </article>
     <article class="plan">
@@ -214,19 +150,16 @@
     </article>
   </div>
 </section>
-
 </main>
 
-<footer id="contact" class="footer">
-  <div>
-    <a class="brand" href="#top"><svg class="brand-mark"><use href="#logo"/></svg><span>Alpha<b>Strats</b></span></a>
-    <p>Questions or orders: <a class="mail" href="mailto:hello@yourdomain.com">hello@yourdomain.com</a></p>
-    <p class="credit">Charts by <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a> Lightweight Charts.</p>
-  </div>
-  <p class="disclaimer">AlphaStrats provides educational trading research. Nothing on this site is financial advice. Backtested results are hypothetical, do not include slippage or funding costs, and past performance does not guarantee future results. Trading crypto and tokenised stocks involves risk of loss. Stock and commodity prices shown are USDT-settled tokenised contracts that track the underlying asset and trade around the clock, so they can differ from the exchange closing price.</p>
-</footer>
-
+<script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="app.js"></script>
+<script src="common.js?v=10"></script>
+<script src="strategies.js?v=10"></script>
+<script src="strategy-view.js?v=10"></script>
+<script src="features.js?v=10"></script>
+<script src="terminal.js?v=10"></script>
+<script src="sentiment.js?v=10"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
