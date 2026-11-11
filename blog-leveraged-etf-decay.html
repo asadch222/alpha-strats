@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return — AlphaStrats</title>
+<meta name="description" content="Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+</head>
+<body data-page="blog" data-live="off">
+<script src="layout.js?v=18"></script>
+
+<main id="top">
+<article class="post">
+  <a class="post-back" href="blog.html">← All articles</a>
+  <span class="bcat s">US stocks</span>
+  <h1>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return</h1>
+  <p class="post-sum">Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.</p>
+  <p class="post-meta">AlphaStrats Research · November 2026 · 3 min read · Advanced</p>
+  <div class="post-body">
+<h2>The promise is daily</h2>
+<p>A three-times leveraged fund aims to deliver three times the index's return each day. To do that it must rebalance every day so that its exposure is again three times its assets at the next open. That daily reset is the source of everything that follows.</p>
+<p>Over a single day the fund does what it says. Over many days, returns compound, and compounding three-times daily returns is not the same as tripling the compounded return.</p>
+<h2>A two-day example</h2>
+<p>Suppose an index rises 10% and then falls 9.09%, ending exactly where it started.</p>
+<ul>
+<li>The index: 100 → 110 → 100. Flat.</li>
+<li>The 3x fund: up 30% to 130, then down 27.27% to 94.5.</li>
+</ul>
+<p>The index is unchanged and the fund has lost 5.5%. Nothing went wrong. The fund lost money because it had more exposure after the rise, so the following fall cost more in absolute terms than the rise had gained.</p>
+<h2>Volatility drag</h2>
+<p>This effect is called volatility drag or decay. Its size depends on how much the index bounces around, and it grows with the square of the leverage. As a rough guide, a three-times fund suffers about nine times the drag of the unleveraged index for the same volatility.</p>
+<p>Two conclusions follow.</p>
+<ul>
+<li><b>Choppy, sideways markets are the worst case.</b> The index goes nowhere and the fund steadily loses value.</li>
+<li><b>Strong, steady trends are the best case.</b> If the index climbs day after day with little volatility, compounding works in the fund's favour, and it can return more than three times the index.</li>
+</ul>
+<p>So the outcome depends on the path, not just the destination. Two periods with the same index return can give a leveraged fund very different results.</p>
+<h2>The inverse funds</h2>
+<p>Funds designed to return minus three times the daily move have the same structure and the same drag, plus an extra problem: markets rise over time. A long-term holder of an inverse leveraged fund is fighting both the drift and the decay. They are built for short holding periods.</p>
+<h2>Other costs</h2>
+<p>Leveraged funds charge higher fees than plain index funds. They also pay financing costs on the borrowed exposure, which rise when interest rates rise. These are smaller than volatility drag in turbulent periods but add up in calm ones.</p>
+<h2>Can a fund go to zero?</h2>
+<p>In principle a three-times fund would lose everything if its index fell more than a third in one day. Exchange circuit breakers that halt trading after large falls make that unlikely for broad indices, but narrow sector indices can move further. The real-world risk is less about a single day and more about a sustained decline: a fall of 50% in the index, with typical volatility along the way, can leave a three-times fund down 90% or more.</p>
+<h2>What this means for strategies</h2>
+<ul>
+<li><b>Holding period matters more than direction.</b> Short, trend-aligned trades suit these funds. Buy-and-hold does not.</li>
+<li><b>Trend filters earn their keep.</b> Because trending periods help and choppy periods hurt, rules that keep you out of sideways markets address the main weakness directly.</li>
+<li><b>Position size must be smaller.</b> A fund that moves three times as much needs roughly a third of the size for the same risk.</li>
+<li><b>Backtests need the actual fund's prices,</b> not three times the index, or the drag is missed.</li>
+</ul>
+<h2>Key takeaways</h2>
+<ul>
+<li>Leveraged funds target a multiple of the daily return, and daily compounding breaks the multiple over longer periods.</li>
+<li>Volatility drag grows with the square of leverage and punishes sideways markets.</li>
+<li>Steady trends can produce more than the stated multiple.</li>
+<li>Treat them as short-term trading tools and size accordingly.</li>
+</ul>
+  </div>
+  <p class="note post-note">This article is education, not financial advice. It describes how markets tend to behave; it does not predict what any market will do. Trading involves risk of loss.</p>
+  <div class="panel cta-band"><div><h3>See these ideas on live markets</h3><p>Open any coin or stock for a live chart, funding, open interest and a plain-English reading.</p></div><a class="btn btn-primary" href="chart.html">Open a live chart</a></div>
+</article>
+<section class="section">
+  <div class="section-head"><div><h2>Keep reading</h2></div><a class="btn btn-ghost" href="blog.html">All articles</a></div>
+  <div class="bgrid"><a class="panel bcard" data-cat="US stocks" href="blog-earnings-season-playbook.html"><span class="bcat s">US stocks</span><h3>Earnings season: implied moves, reactions and what the price is really telling you</h3><p>Four times a year, companies report results and prices jump. The move is rarely about whether the numbers were good. It is about whether they were better than expected.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-sector-rotation-business-cycle.html"><span class="bcat s">US stocks</span><h3>Sector rotation: how money moves through the market as the economy changes</h3><p>Different parts of the stock market lead at different stages of the economic cycle. The pattern is imperfect but worth knowing, because sector choice often matters more than stock choice.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-semiconductor-cycle.html"><span class="bcat s">US stocks</span><h3>The semiconductor cycle: why chip stocks boom and bust</h3><p>Chip shares are among the most volatile large companies in the market. The swings are not random; they follow a recognisable cycle driven by supply, demand and long factory lead times.</p><em>3 min read · Advanced</em></a></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+</body>
+</html>

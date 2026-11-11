@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Position sizing and risk of ruin: the maths that decides whether you survive — AlphaStrats</title>
+<meta name="description" content="Traders spend most of their time on entries. Over the long run, how much is risked on each trade matters more than when it is entered.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+</head>
+<body data-page="blog" data-live="off">
+<script src="layout.js?v=18"></script>
+
+<main id="top">
+<article class="post">
+  <a class="post-back" href="blog.html">← All articles</a>
+  <span class="bcat s">US stocks</span>
+  <h1>Position sizing and risk of ruin: the maths that decides whether you survive</h1>
+  <p class="post-sum">Traders spend most of their time on entries. Over the long run, how much is risked on each trade matters more than when it is entered.</p>
+  <p class="post-meta">AlphaStrats Research · November 2026 · 3 min read · Advanced</p>
+  <div class="post-body">
+<h2>The asymmetry of losses</h2>
+<p>Losses and gains are not symmetrical. After a 10% loss you need an 11% gain to recover. After 25% you need 33%. After 50% you need 100%. After 75% you need 300%. The deeper the hole, the steeper the climb.</p>
+<p>This single fact is the argument for controlling risk. A strategy with an excellent average return can still fail if a run of losses takes the account too low to recover.</p>
+<h2>Risk per trade</h2>
+<p>The standard method is to risk a fixed percentage of the account on each trade.</p>
+<ol>
+<li>Choose the percentage you are willing to lose if the trade fails.</li>
+<li>Find the distance from your entry to your stop.</li>
+<li>Position size = (account × risk percentage) ÷ stop distance.</li>
+</ol>
+<p>With a $10,000 account, 1% risk and a stop $5 away from entry, the size is 20 units. If the stop were $2 away, it would be 50 units. The loss if stopped is the same in both cases: $100.</p>
+<p>Because the amount risked is a percentage of the current balance, position sizes shrink after losses and grow after gains. That automatic adjustment slows the damage in a losing run.</p>
+<h2>Losing streaks are normal</h2>
+<p>With a 50% win rate, a streak of five losses will appear regularly. Over a few hundred trades, eight or more in a row is likely. With a 40% win rate, longer streaks are common.</p>
+<p>The practical question is how much such a streak costs.</p>
+<ul>
+<li>Risking 1% per trade, ten straight losses cost about 9.6%.</li>
+<li>Risking 3%, about 26%.</li>
+<li>Risking 5%, about 40%.</li>
+<li>Risking 10%, about 65%.</li>
+</ul>
+<p>The last two are difficult to recover from and harder still to sit through without abandoning the strategy.</p>
+<h2>The Kelly criterion</h2>
+<p>There is a formula for the bet size that maximises long-run growth, given your win rate and the ratio of average win to average loss. It is called the Kelly criterion.</p>
+<p>Its lesson is two-sided. Risking less than the Kelly amount grows the account more slowly. Risking more than it reduces long-run growth and, beyond roughly twice the Kelly amount, makes eventual ruin likely even with a profitable strategy.</p>
+<p>Full Kelly is also extremely volatile and depends on knowing your true edge, which nobody does. Most professionals who use it bet a fraction, often a quarter to a half. For most traders, a fixed 0.5% to 2% per trade is a sensible range that sits well below any plausible Kelly figure.</p>
+<h2>Leverage is an outcome, not a choice</h2>
+<p>If you size from the stop, leverage falls out of the calculation. A tight stop produces a larger position and higher leverage; a wide stop produces the opposite. Capping leverage on top of this is prudent, because gaps can carry price through a stop and make the real loss larger than planned.</p>
+<h2>Correlated positions</h2>
+<p>Five positions each risking 1% are not 5% of independent risk if they are all technology shares or all coins. They tend to fall together. Treat highly correlated positions as one for risk purposes, and limit total exposure to a single theme.</p>
+<h2>Drawdown rules</h2>
+<p>Decide in advance what you will do at set levels of drawdown: for example, halving risk per trade after a 10% decline, and stopping to review at 20%. Rules set while calm are more reliable than decisions made during a loss.</p>
+<h2>Key takeaways</h2>
+<ul>
+<li>Recovery requires a larger gain than the loss that caused it.</li>
+<li>Size each trade from a fixed risk percentage and the stop distance.</li>
+<li>Plan for losing streaks longer than feel reasonable.</li>
+<li>Risking too much destroys even a profitable strategy; smaller is safer and often faster in the long run.</li>
+</ul>
+  </div>
+  <p class="note post-note">This article is education, not financial advice. It describes how markets tend to behave; it does not predict what any market will do. Trading involves risk of loss.</p>
+  <div class="panel cta-band"><div><h3>See these ideas on live markets</h3><p>Open any coin or stock for a live chart, funding, open interest and a plain-English reading.</p></div><a class="btn btn-primary" href="chart.html">Open a live chart</a></div>
+</article>
+<section class="section">
+  <div class="section-head"><div><h2>Keep reading</h2></div><a class="btn btn-ghost" href="blog.html">All articles</a></div>
+  <div class="bgrid"><a class="panel bcard" data-cat="US stocks" href="blog-leveraged-etf-decay.html"><span class="bcat s">US stocks</span><h3>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return</h3><p>Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-earnings-season-playbook.html"><span class="bcat s">US stocks</span><h3>Earnings season: implied moves, reactions and what the price is really telling you</h3><p>Four times a year, companies report results and prices jump. The move is rarely about whether the numbers were good. It is about whether they were better than expected.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-sector-rotation-business-cycle.html"><span class="bcat s">US stocks</span><h3>Sector rotation: how money moves through the market as the economy changes</h3><p>Different parts of the stock market lead at different stages of the economic cycle. The pattern is imperfect but worth knowing, because sector choice often matters more than stock choice.</p><em>3 min read · Advanced</em></a></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+</body>
+</html>

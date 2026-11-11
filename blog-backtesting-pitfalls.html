@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backtesting pitfalls: why most strategies look better on paper than in an account — AlphaStrats</title>
+<meta name="description" content="A backtest is easy to produce and easy to get wrong. These are the errors that turn a mediocre idea into an impressive-looking chart.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+</head>
+<body data-page="blog" data-live="off">
+<script src="layout.js?v=18"></script>
+
+<main id="top">
+<article class="post">
+  <a class="post-back" href="blog.html">← All articles</a>
+  <span class="bcat s">US stocks</span>
+  <h1>Backtesting pitfalls: why most strategies look better on paper than in an account</h1>
+  <p class="post-sum">A backtest is easy to produce and easy to get wrong. These are the errors that turn a mediocre idea into an impressive-looking chart.</p>
+  <p class="post-meta">AlphaStrats Research · November 2026 · 3 min read · Advanced</p>
+  <div class="post-body">
+<h2>Look-ahead bias</h2>
+<p>The most common mistake is using information that would not have been available at the time. Examples:</p>
+<ul>
+<li>Acting on a candle's closing price at that same close, as though you could trade at a price you only knew once it was final.</li>
+<li>Using the day's high or low to decide an entry earlier that day.</li>
+<li>Using financial data on the date of the reporting period rather than the later date it was published.</li>
+</ul>
+<p>The fix is to act only on completed information and to execute on the next available price. A backtest that enters at the next candle's open is far more believable than one that enters at the signal candle's close.</p>
+<h2>Overfitting</h2>
+<p>Give a strategy enough adjustable settings and it can be made to fit any history. Each added rule or tuned number improves the past result and, usually, weakens the future one. The strategy has learned the noise.</p>
+<p>Warning signs:</p>
+<ul>
+<li>Performance collapses when a setting is changed slightly.</li>
+<li>Many rules, each rescuing a handful of trades.</li>
+<li>A beautiful result from a small number of trades.</li>
+<li>Settings chosen after seeing which ones worked.</li>
+</ul>
+<p>Robust strategies are simple and tolerant. They work reasonably across a range of settings and across several markets, not brilliantly at one precise combination.</p>
+<h2>Out-of-sample testing</h2>
+<p>Split the history. Develop the idea on one part and test it, once, on a part it has never seen. If the unseen period is much worse, the strategy was fitted to the first. A stricter version, called walk-forward testing, repeats this in rolling steps.</p>
+<p>The discipline only works if the unseen data stays unseen. Every time you adjust the strategy after looking at the test period, that period becomes part of the fitting.</p>
+<h2>Survivorship bias</h2>
+<p>Testing only on companies or coins that exist today ignores those that failed and were removed. The survivors are, by definition, the ones that did well. A strategy tested on them inherits their good fortune. This matters most for long tests on shares and for almost any test on small coins.</p>
+<h2>Costs</h2>
+<p>A test without costs is a test of a different strategy. Include:</p>
+<ul>
+<li>trading fees on every entry and exit,</li>
+<li>the spread and slippage, larger in thin markets and around news,</li>
+<li>funding or borrowing costs for leveraged and short positions,</li>
+<li>gaps, where a stop fills far beyond its level.</li>
+</ul>
+<p>Frequent-trading strategies are the most sensitive. An edge of a fraction of a percent per trade can vanish entirely.</p>
+<h2>Too few trades</h2>
+<p>Forty-seven trades or a five-month period can show a striking result that is largely luck. A handful of large winners often account for most of the profit. Ask how the result looks without the best three trades, and how long a losing streak is plausible at that win rate.</p>
+<h2>Regime dependence</h2>
+<p>A strategy tested only in a rising market has been tested only for rising markets. The same applies to low-volatility periods or a single sector's boom. A test should include different conditions, or its conclusions should be limited to the conditions it covered.</p>
+<h2>Selection bias</h2>
+<p>If you test fifty ideas and present the best one, its result overstates its quality. The more ideas tried, the more likely the winner is a coincidence. Honest reporting includes how many variations were examined.</p>
+<h2>A believable backtest</h2>
+<ul>
+<li>Signals from closed candles, entries at the next open.</li>
+<li>All costs included.</li>
+<li>Tested on unseen data and on other markets.</li>
+<li>Enough trades across different conditions.</li>
+<li>Drawdown and losing streaks reported alongside the return.</li>
+</ul>
+<h2>Key takeaways</h2>
+<ul>
+<li>Most backtest errors make results look better, never worse.</li>
+<li>Simplicity and tolerance to changed settings matter more than headline return.</li>
+<li>Unseen data is the only real test, and only once.</li>
+<li>A short test with few trades is a hypothesis, not proof.</li>
+</ul>
+  </div>
+  <p class="note post-note">This article is education, not financial advice. It describes how markets tend to behave; it does not predict what any market will do. Trading involves risk of loss.</p>
+  <div class="panel cta-band"><div><h3>See these ideas on live markets</h3><p>Open any coin or stock for a live chart, funding, open interest and a plain-English reading.</p></div><a class="btn btn-primary" href="chart.html">Open a live chart</a></div>
+</article>
+<section class="section">
+  <div class="section-head"><div><h2>Keep reading</h2></div><a class="btn btn-ghost" href="blog.html">All articles</a></div>
+  <div class="bgrid"><a class="panel bcard" data-cat="US stocks" href="blog-leveraged-etf-decay.html"><span class="bcat s">US stocks</span><h3>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return</h3><p>Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-earnings-season-playbook.html"><span class="bcat s">US stocks</span><h3>Earnings season: implied moves, reactions and what the price is really telling you</h3><p>Four times a year, companies report results and prices jump. The move is rarely about whether the numbers were good. It is about whether they were better than expected.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-sector-rotation-business-cycle.html"><span class="bcat s">US stocks</span><h3>Sector rotation: how money moves through the market as the economy changes</h3><p>Different parts of the stock market lead at different stages of the economic cycle. The pattern is imperfect but worth knowing, because sector choice often matters more than stock choice.</p><em>3 min read · Advanced</em></a></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+</body>
+</html>

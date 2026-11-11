@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Options, gamma and dealer hedging: the invisible hand in daily price moves — AlphaStrats</title>
+<meta name="description" content="A large share of daily stock trading comes from firms hedging options. Their mechanical buying and selling can calm markets or amplify them, depending on positioning.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+</head>
+<body data-page="blog" data-live="off">
+<script src="layout.js?v=18"></script>
+
+<main id="top">
+<article class="post">
+  <a class="post-back" href="blog.html">← All articles</a>
+  <span class="bcat s">US stocks</span>
+  <h1>Options, gamma and dealer hedging: the invisible hand in daily price moves</h1>
+  <p class="post-sum">A large share of daily stock trading comes from firms hedging options. Their mechanical buying and selling can calm markets or amplify them, depending on positioning.</p>
+  <p class="post-meta">AlphaStrats Research · November 2026 · 3 min read · Advanced</p>
+  <div class="post-body">
+<h2>Who is on the other side</h2>
+<p>When investors buy or sell options, the counterparty is usually a dealer, a firm that makes markets and does not want a view on direction. To stay neutral, the dealer hedges by trading the underlying shares or index futures. That hedging is automatic. It follows from the mathematics of the option, not from any opinion.</p>
+<h2>Delta and gamma in plain terms</h2>
+<p><b>Delta</b> is how much an option's price changes when the share moves by one dollar. It tells the dealer how many shares to hold as a hedge.</p>
+<p><b>Gamma</b> is how quickly delta itself changes as the share moves. It tells the dealer how much the hedge must be adjusted when the price changes.</p>
+<p>Gamma is largest for options close to the current price and close to expiry. That is where hedging activity is most intense.</p>
+<h2>Two regimes</h2>
+<p><b>Dealers long gamma.</b> Their hedging runs against the market: they sell as price rises and buy as it falls. This dampens moves. Markets in this state tend to be calm, with small daily ranges and reversals around popular strike prices.</p>
+<p><b>Dealers short gamma.</b> Their hedging runs with the market: they buy as price rises and sell as it falls. This amplifies moves. Markets in this state tend to trend within the day and produce larger ranges in both directions.</p>
+<p>A market can flip from one state to the other as price crosses the level where dealer positioning changes sign. This is one reason a quiet market can suddenly become violent after falling through a certain level.</p>
+<h2>Expiry effects</h2>
+<p>As options approach expiry, gamma near the current price rises, and hedging flows grow. Prices are often drawn toward strikes with a lot of open contracts, sometimes called pinning. After a large expiry, those hedges disappear, and the market is free to move more. The monthly and quarterly expiries are the largest.</p>
+<p>The growth of options that expire within a day has concentrated these effects into individual sessions, adding intraday swings that have little to do with news.</p>
+<h2>Volatility and the feedback loop</h2>
+<p>Hedging also responds to changes in expected volatility. When volatility falls, dealers typically buy shares to adjust; when it rises, they sell. In a calm, rising market this creates a supportive loop. In a falling market it does the reverse: declines raise volatility, which triggers selling, which deepens the decline.</p>
+<h2>What a trader can take from this</h2>
+<p>You do not need the detailed positioning data to benefit from the concepts.</p>
+<ul>
+<li><b>Expect different behaviour in calm and stressed markets.</b> Mean-reversion works better when ranges are small and suppressed. Trend-following works better once volatility expands.</li>
+<li><b>Be careful around expiry dates.</b> Odd pinning before and freer movement after are normal.</li>
+<li><b>Do not read meaning into every intraday swing.</b> Some are mechanical.</li>
+<li><b>Watch the volatility index.</b> A rising reading alongside falling prices suggests the amplifying regime.</li>
+</ul>
+<h2>The limits</h2>
+<p>Estimates of dealer positioning rely on assumptions about who bought and who sold each option, which are not directly observable. Published figures can be wrong. Treat them as a rough description of conditions, not a precise map of levels.</p>
+<h2>Key takeaways</h2>
+<ul>
+<li>Dealers hedge options mechanically, and that hedging moves prices.</li>
+<li>When dealers are long gamma, moves are dampened; when short, they are amplified.</li>
+<li>Expiry concentrates these effects and their removal frees the market.</li>
+<li>Use the idea to choose between mean-reversion and trend tactics.</li>
+</ul>
+  </div>
+  <p class="note post-note">This article is education, not financial advice. It describes how markets tend to behave; it does not predict what any market will do. Trading involves risk of loss.</p>
+  <div class="panel cta-band"><div><h3>See these ideas on live markets</h3><p>Open any coin or stock for a live chart, funding, open interest and a plain-English reading.</p></div><a class="btn btn-primary" href="chart.html">Open a live chart</a></div>
+</article>
+<section class="section">
+  <div class="section-head"><div><h2>Keep reading</h2></div><a class="btn btn-ghost" href="blog.html">All articles</a></div>
+  <div class="bgrid"><a class="panel bcard" data-cat="US stocks" href="blog-leveraged-etf-decay.html"><span class="bcat s">US stocks</span><h3>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return</h3><p>Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-earnings-season-playbook.html"><span class="bcat s">US stocks</span><h3>Earnings season: implied moves, reactions and what the price is really telling you</h3><p>Four times a year, companies report results and prices jump. The move is rarely about whether the numbers were good. It is about whether they were better than expected.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-sector-rotation-business-cycle.html"><span class="bcat s">US stocks</span><h3>Sector rotation: how money moves through the market as the economy changes</h3><p>Different parts of the stock market lead at different stages of the economic cycle. The pattern is imperfect but worth knowing, because sector choice often matters more than stock choice.</p><em>3 min read · Advanced</em></a></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+</body>
+</html>

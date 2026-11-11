@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The VIX and the volatility curve: reading fear properly — AlphaStrats</title>
+<meta name="description" content="The VIX is called the fear gauge, but its level alone says little. Its relationship to recent volatility and to its own futures curve says much more.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+</head>
+<body data-page="blog" data-live="off">
+<script src="layout.js?v=18"></script>
+
+<main id="top">
+<article class="post">
+  <a class="post-back" href="blog.html">← All articles</a>
+  <span class="bcat s">US stocks</span>
+  <h1>The VIX and the volatility curve: reading fear properly</h1>
+  <p class="post-sum">The VIX is called the fear gauge, but its level alone says little. Its relationship to recent volatility and to its own futures curve says much more.</p>
+  <p class="post-meta">AlphaStrats Research · November 2026 · 3 min read · Advanced</p>
+  <div class="post-body">
+<h2>What the VIX is</h2>
+<p>The VIX is calculated from the prices of options on the main US index. It expresses the level of volatility those prices imply for the next 30 days, as an annual percentage. It is a measure of the price of insurance, and therefore of how much uncertainty investors are paying to protect against.</p>
+<p>A quick conversion: divide the VIX by 16 to get the rough daily move the market is pricing. A VIX of 16 implies about 1% a day. A VIX of 32 implies about 2%.</p>
+<h2>What it is not</h2>
+<p>It does not forecast direction. A high VIX means large moves are expected, up or down. It also is not a measure of what has happened; that is realised volatility. The two are related but distinct.</p>
+<h2>Implied against realised</h2>
+<p>Implied volatility usually sits above what subsequently occurs. The gap is the premium earned by those selling insurance. Watching the gap is informative.</p>
+<ul>
+<li><b>Implied well above realised:</b> investors are paying up for protection despite calm prices. Caution is high.</li>
+<li><b>Implied close to or below realised:</b> protection is cheap relative to actual movement. Complacency, or a market that has not caught up with rising turbulence.</li>
+</ul>
+<h2>The term structure</h2>
+<p>Futures on the VIX trade for different months. Plotting their prices gives a curve.</p>
+<ul>
+<li><b>Upward sloping (contango).</b> Later months are priced higher than near ones. This is the normal state: calm now, uncertainty further out.</li>
+<li><b>Downward sloping (backwardation).</b> Near months are priced higher. The market fears something immediate. This appears during sell-offs and is relatively rare.</li>
+</ul>
+<p>A flip from the normal shape into backwardation is one of the clearer signs of genuine stress. A return to the normal shape after a sell-off suggests the acute phase is passing.</p>
+<h2>Behaviour worth knowing</h2>
+<ul>
+<li><b>Volatility clusters.</b> Turbulent days follow turbulent days. A spike rarely vanishes overnight.</li>
+<li><b>It reverts to its average.</b> Extreme readings do not persist indefinitely. Very high levels tend to fall back over weeks; very low levels tend to rise eventually.</li>
+<li><b>It moves opposite to shares, most of the time.</b> Falling markets raise the VIX sharply. Rising markets lower it slowly.</li>
+<li><b>Spikes are fast and declines are slow.</b> The asymmetry reflects how quickly fear arrives compared with how slowly confidence returns.</li>
+</ul>
+<h2>Volatility products</h2>
+<p>Funds that track VIX futures do not track the VIX itself. In the normal upward-sloping state, such a fund must keep selling cheaper near-term futures and buying more expensive later ones, which steadily erodes its value. Leveraged versions suffer the same daily-compounding drag as any leveraged fund. They can rise enormously in a panic and lose most of their value in quiet periods. They are short-term instruments.</p>
+<h2>Putting it to use</h2>
+<ul>
+<li><b>Adjust size to the regime.</b> When the VIX is elevated, daily ranges are larger; smaller positions keep risk constant.</li>
+<li><b>Choose tactics by regime.</b> Low and stable volatility favours buying dips. Rising volatility with an inverted curve favours caution and trend-following.</li>
+<li><b>Watch for extremes as context.</b> A very high reading after a long decline has often coincided with the later stages of selling. It is a condition, not a signal.</li>
+<li><b>Check event dates.</b> Volatility rises into scheduled events and usually falls afterwards, whatever the outcome.</li>
+</ul>
+<h2>Key takeaways</h2>
+<ul>
+<li>The VIX prices expected movement, not direction.</li>
+<li>Compare it with realised volatility to see whether fear is rich or cheap.</li>
+<li>An inverted futures curve marks real stress.</li>
+<li>Volatility funds decay in calm markets and are not long-term holdings.</li>
+</ul>
+  </div>
+  <p class="note post-note">This article is education, not financial advice. It describes how markets tend to behave; it does not predict what any market will do. Trading involves risk of loss.</p>
+  <div class="panel cta-band"><div><h3>See these ideas on live markets</h3><p>Open any coin or stock for a live chart, funding, open interest and a plain-English reading.</p></div><a class="btn btn-primary" href="chart.html">Open a live chart</a></div>
+</article>
+<section class="section">
+  <div class="section-head"><div><h2>Keep reading</h2></div><a class="btn btn-ghost" href="blog.html">All articles</a></div>
+  <div class="bgrid"><a class="panel bcard" data-cat="US stocks" href="blog-leveraged-etf-decay.html"><span class="bcat s">US stocks</span><h3>Leveraged ETFs: why a 3x fund does not give you 3x the long-term return</h3><p>Funds such as SOXL promise three times the daily move of an index. Over weeks and months the result can be very different, and the reason is arithmetic, not mismanagement.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-earnings-season-playbook.html"><span class="bcat s">US stocks</span><h3>Earnings season: implied moves, reactions and what the price is really telling you</h3><p>Four times a year, companies report results and prices jump. The move is rarely about whether the numbers were good. It is about whether they were better than expected.</p><em>3 min read · Advanced</em></a><a class="panel bcard" data-cat="US stocks" href="blog-sector-rotation-business-cycle.html"><span class="bcat s">US stocks</span><h3>Sector rotation: how money moves through the market as the economy changes</h3><p>Different parts of the stock market lead at different stages of the economic cycle. The pattern is imperfect but worth knowing, because sector choice often matters more than stock choice.</p><em>3 min read · Advanced</em></a></div>
+</section>
+</main>
+
+<script>renderFooter()</script>
+<script src="config.js?v=18"></script>
+<script src="auth.js?v=18"></script>
+</body>
+</html>

@@ -3,14 +3,14 @@
    market search and price strip on pages that do not load market data. */
 (function () {
   const page = document.body.dataset.page || '', live = document.body.dataset.live !== 'off';
-  const links = [['premium', 'premium.html', 'Premium'], ['markets', 'markets.html', 'Markets'], ['heatmaps', 'heatmaps.html', 'Heatmaps'], ['chart', 'chart.html', 'Charts'], ['tools', 'tools.html', 'Scanner'], ['sentiment', 'sentiment.html', 'Sentiment'], ['learn', 'learn.html', 'Learn'], ['members', 'members.html', 'Members']];
+  const links = [['premium', 'premium.html', 'Premium'], ['markets', 'markets.html', 'Markets'], ['heatmaps', 'heatmaps.html', 'Heatmaps'], ['chart', 'chart.html', 'Charts'], ['tools', 'tools.html', 'Scanner'], ['sentiment', 'sentiment.html', 'Sentiment'], ['blog', 'blog.html', 'Blog'], ['learn', 'learn.html', 'Learn'], ['members', 'members.html', 'Members']];
   const brand = '<a class="brand" href="index.html"><span class="wm">ALPHA<i></i>STRATS</span></a>';
   const search = `<div class="search" id="search">
       <svg viewBox="0 0 20 20" class="search-ico"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13.5 13.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       <input id="q" type="search" placeholder="Search any coin or stock" autocomplete="off" spellcheck="false" aria-label="Search markets">
       <kbd>/</kbd><div class="search-results" id="qResults" hidden></div></div>`;
   document.currentScript.insertAdjacentHTML('beforebegin', `<header class="nav">${brand}
-    <nav class="nav-links" id="navLinks">${links.map(([id, href, label]) => `<a href="${href}" class="${id === 'premium' ? 'nav-prem ' : ''}${id === 'members' ? 'only-menu ' : ''}${id === page ? 'is-here' : ''}">${label}</a>`).join('')}</nav>
+    <nav class="nav-links" id="navLinks">${links.map(([id, href, label]) => `<a href="${href}" class="${id === 'premium' ? 'nav-prem ' : ''}${id === 'members' || id === 'learn' ? 'only-menu ' : ''}${id === page ? 'is-here' : ''}">${label}</a>`).join('')}</nav>
     ${live ? search : '<span class="nav-gap"></span>'}
     <div class="nav-right">${live ? '<span class="feed-pill" id="feedPill"><i class="dot"></i><span id="feedText">Connecting</span></span>' : ''}<a class="btn btn-ghost btn-sm acct" id="acctBtn" href="login.html">Log in</a><a class="btn btn-primary btn-sm" href="index.html#pricing">Get strategies</a>
       <button class="nav-btn" id="navBtn" aria-label="Menu"><svg viewBox="0 0 20 20" width="20"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
