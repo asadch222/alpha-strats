@@ -727,7 +727,7 @@ function paintFlow() {
     $('flowResult').innerHTML = `<b class="fbig ${cls(x.ret)}">${fmtPct(x.ret, 0)}</b><p>${usd(s.startBalance, 0)} grew to ${usd(x.end, 0)}</p>${sparkSVG(x.balances, 200, 54, true, UP)}<a href="premium.html#${esc(s.id)}">Backtest · see all ${x.n} trades →</a>`;
   }
   paint(); paintFlowScan(); drawWires();
-  new ResizeObserver(drawWires).observe($('flow'));
+  new ResizeObserver(() => drawWires()).observe($('flow'));
 }
 function paintFlowScan() {
   const done = all().filter((a) => a.k && a.k.scan);
@@ -736,8 +736,10 @@ function paintFlowScan() {
   $('flowScan').innerHTML = `<div class="split"><i style="width:${(up / done.length) * 100}%"></i><u></u></div>
     <div class="split-lbl"><span class="up">▲ ${up} uptrend</span><span class="down">▼ ${done.length - up} down</span></div>`;
 }
-function drawWires() {
-  const box = $('flow'), svg = $('flowWires'), o = box.getBoundingClientRect();
+function drawWires(boxId = 'flow') { // draws the animated wires between the five cards of a flow diagram
+  const box = $(boxId), svg = box && box.querySelector('.flow-wires');
+  if (!svg || !$('fE')) return;
+  const o = box.getBoundingClientRect();
   if (!o.width) return;
   const r = (id) => { const b = $(id).getBoundingClientRect(); return { l: b.left - o.left, r: b.right - o.left, t: b.top - o.top, b: b.bottom - o.top, cx: b.left - o.left + b.width / 2, cy: b.top - o.top + b.height / 2 }; };
   const A1 = r('fA'), E = r('fE'), stacked = E.l < A1.r; // phone layout: cards in one column

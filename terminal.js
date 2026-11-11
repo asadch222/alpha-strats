@@ -209,18 +209,54 @@ function paintMoversList() {
     <div><b class="mono ${e.up ? 'up' : 'down'}">${fmtPct(e.pct)}</b><small>${e.label}</small></div></div>`).join('') || '<div class="skeleton">Nothing yet.</div>');
 }
 
-/* ---------- the "bot" strip: this market's own five-step reading ---------- */
+/* ---------- this market's own bot: five wired cards, the same idea as the home page ---------- */
 function paintMarketBot(s, hi, lo) {
-  const a = sel, fg = fgInfo(s.fg), node = (n, title, value, line, c = '') => `<div class="mb-node ${c}"><span class="fstep"><b>${n}</b>${title}</span><strong>${value}</strong><small>${line}</small></div>`;
-  const verdict = s.tone === 'good' ? 'Conditions favour buyers' : s.tone === 'bad' ? 'Conditions favour sellers' : 'Mixed picture: wait for clarity';
-  $('mbot').dataset.id = a.id; $('mbot')._v = null;
-  $('mbot').innerHTML = `<div class="mb-title">${icon(a, 'sm')}<b>${esc(a.t)} bot</b><span>reads this market live, on ${TF_WORDS[ch.tf]} candles</span></div><div class="mb-row">
-    ${node(1, 'Live price', '<span data-f="p"></span>', '<span data-f="c"></span> in 24 hours')}
-    ${node(2, 'Trend', s.up ? '<span class="up">▲ Rising</span>' : '<span class="down">▼ Falling</span>', s.up ? 'Price is above its average' : 'Price is below its average')}
-    ${node(3, 'Momentum', s.rsi.toFixed(0) + '<i>/100</i>', s.rsi < 30 ? 'Sold very hard' : s.rsi > 70 ? 'Bought very hard' : s.rsi >= 50 ? 'Buyers slightly ahead' : 'Sellers slightly ahead')}
-    ${node(4, 'Mood', `<span style="color:${fg[1]}">${s.fg}</span>`, fg[0])}
-    ${node(5, 'Reading', s.setup, verdict, 'mb-out ' + (s.tone || 'flat'))}</div>`;
-  paint();
+  const a = sel, fg = fgInfo(s.fg), nm = esc(a.name || a.t);
+  const chk = (state, text) => `<li class="${state}">${text}</li>`;
+  const verdict = s.tone === 'good' ? 'Conditions favour buyers' : s.tone === 'bad' ? 'Conditions favour sellers' : s.tone === 'hot' ? 'Stretched: handle with care' : 'Mixed picture: wait for clarity';
+  const tone = s.tone === 'good' ? 'good' : s.tone === 'bad' ? 'bad' : 'mid';
+  const box = $('mbot');
+  box.dataset.id = a.id; box._v = null;
+  box.innerHTML = `<svg class="flow-wires" aria-hidden="true"></svg>
+    <div class="flow-col">
+      <div class="fcard" id="fA"><span class="fstep"><b>1</b>Live price</span>
+        <div class="mb-px">${icon(a)}<div><b>${esc(a.t)}</b><small>${nm}</small></div></div>
+        <strong class="mb-big" data-f="p"></strong>
+        <div class="frow"><b>24h change</b><span class="mono" data-f="c"></span></div>
+        <footer><i class="dot on"></i><b id="mbTps">–</b> trades a second</footer></div>
+      <div class="fcard" id="fB"><span class="fstep"><b>2</b>Chart check</span>
+        <div class="frow"><b>Trend</b><span>${s.up ? '<em class="up">▲ Rising</em>' : '<em class="down">▼ Falling</em>'}</span></div>
+        <div class="frow"><b>Momentum</b><span class="mono">${s.rsi.toFixed(0)}/100</span></div>
+        <div class="gauge"><i style="left:${clamp(s.rsi, 0, 100)}%"></i></div>
+        <footer><i class="dot on"></i><b>${ch.k.length}</b> candles of ${TF_WORDS[ch.tf]} read</footer></div>
+    </div>
+    <div class="fengine" id="fE"><span class="fstep"><b>3</b>${esc(a.t)} bot decides</span>
+      <div class="fgear"><span></span></div>
+      <div><h3>${nm} bot</h3><p>Reads this market live</p>
+        <ul class="fchecks">
+          ${chk(s.up ? 'ok' : 'no', s.up ? 'Trend is rising' : 'Trend is falling')}
+          ${chk(s.rsi > 70 || s.rsi < 30 ? 'mid' : s.rsi >= 50 ? 'ok' : 'no', s.rsi > 70 ? 'Bought very hard' : s.rsi < 30 ? 'Sold very hard' : s.rsi >= 50 ? 'Buyers slightly ahead' : 'Sellers slightly ahead')}
+          ${chk(s.volRatio > 1.5 ? 'ok' : 'mid', s.volRatio == null ? 'Activity unknown' : s.volRatio > 1.5 ? `Busy: ${s.volRatio.toFixed(1)}x normal` : `Activity ${s.volRatio.toFixed(1)}x normal`)}
+          ${chk(s.fg > 55 ? 'ok' : s.fg < 45 ? 'no' : 'mid', `Mood: ${fg[0].toLowerCase()} (${s.fg})`)}
+        </ul></div>
+      <footer><i class="dot on"></i>Setup score <b>${s.score}</b> / 100</footer></div>
+    <div class="flow-col">
+      <div class="fcard" id="fC"><span class="fstep"><b>4</b>Buyers vs sellers</span>
+        <div id="mbPress" class="fscan">Waiting for trades…</div>
+        <div class="frow"><b>Mood</b><span class="fg-pill" style="--c:${fg[1]}"><b>${s.fg}</b>${fg[0]}</span></div></div>
+      <div class="fcard fresult ${tone}" id="fD"><span class="fstep"><b>5</b>Reading</span>
+        <b class="mb-verdict">${s.setup}</b><p>${verdict}</p>
+        ${sparkSVG(ch.k.slice(-90).map((x) => x.c), 200, 46, true)}
+        <a href="#analysis">See the full analysis ↓</a></div>
+    </div>`;
+  paint(); paintBotLive(); drawWires('mbot');
+}
+function paintBotLive() { // the parts of the bot that move every second
+  const now = Date.now(), recent = pro.trades.filter((t) => now - t.t < 5000).length;
+  setT('mbTps', pro.trades.length ? (recent / 5).toFixed(recent < 50 ? 1 : 0) : '–');
+  if (!pro.trades.length) return;
+  const buy = pro.trades.reduce((s, t) => s + (t.buy ? t.usd : 0), 0), tot = pro.trades.reduce((s, t) => s + t.usd, 0), pct = tot ? (buy / tot) * 100 : 50;
+  setHTML('mbPress', `<div class="split"><i style="width:${pct}%"></i><u></u></div><div class="split-lbl"><span class="up">Buyers ${pct.toFixed(0)}%</span><span class="down">Sellers ${(100 - pct).toFixed(0)}%</span></div>`);
 }
 
 /* ---------- start ---------- */
@@ -245,7 +281,8 @@ function initTerminal() {
     if (e.target.closest('[data-open-pick]')) return togglePick();
     if (!e.target.closest('#mktPanel')) togglePick(false);
   });
-  setInterval(tickPro, 1000);
+  setInterval(() => { tickPro(); paintBotLive(); }, 1000);
+  new ResizeObserver(() => drawWires('mbot')).observe($('mbot'));
   setInterval(pollOI, 15000);
   initMovers();
 }

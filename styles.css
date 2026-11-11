@@ -865,3 +865,23 @@ h1 em { background: none; -webkit-background-clip: border-box; background-clip: 
   [data-tip]:hover::after { width: 200px; }
   .fund-row .fg-pill { min-width: 0; } .fund-row .fg-pill b + * { display: none; }
 }
+
+/* ---------- per-market wired bot (market page) ---------- */
+.mbot.flow { max-width: 1040px; margin: 18px auto 34px; grid-template-columns: 1fr 1.08fr 1fr; gap: 54px; min-height: 120px; }
+.mbot .fcard, .mbot .fengine { padding: 16px; }
+.mb-px { display: flex; align-items: center; gap: 10px; }
+.mb-px b { display: block; font-size: 16px; line-height: 1.2; } .mb-px small { color: var(--muted); font-size: 12px; }
+.mb-big { font: 700 26px var(--mono); letter-spacing: -.04em; line-height: 1.1; }
+.mbot .frow em { font-style: normal; font-weight: 600; display: inline; font-size: 13px; }
+.mbot .gauge { margin: 2px 0 4px; }
+.mbot .fengine h3 { font-size: 18px; }
+.fchecks li.no::before { content: "✕"; background: #ff6b70; color: #2a0607; }
+.fchecks li.mid::before { content: "–"; background: #f5c451; color: #2b1d00; }
+.fresult.bad { background: linear-gradient(160deg, #fdf0f0, #fff 70%); border-color: #f6c6c8; }
+.fresult.mid { background: linear-gradient(160deg, #fff8e8, #fff 70%); border-color: #f1d9a0; }
+.mb-verdict { font-size: 19px; letter-spacing: -.02em; line-height: 1.2; }
+.fresult.good .mb-verdict { color: #087f58; } .fresult.bad .mb-verdict { color: #c93a3f; } .fresult.mid .mb-verdict { color: var(--warn); }
+.fresult.bad a, .fresult.mid a { color: var(--text); }
+#analysis { scroll-margin-top: 90px; }
+@media (max-width: 960px) { .mbot.flow { gap: 30px; } }
+@media (max-width: 680px) { .mbot.flow { grid-template-columns: 1fr; gap: 26px; max-width: 330px; } }
