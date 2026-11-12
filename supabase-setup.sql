@@ -41,3 +41,36 @@ begin
 end; $$;
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute function public.handle_new_user();
+
+
+-- ============================================================================
+-- ADMIN PORTAL  (safe to run on its own if you already ran the part above)
+-- Adds: an admin role, and one shared document with the website settings and trades.
+-- Everyone can read that document; only an admin can change it.
+-- ============================================================================
+alter table public.profiles add column if not exists role text not null default 'user';   -- 'user' or 'admin'
+
+create table if not exists public.site_settings (
+  id int primary key,
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz default now()
+);
+alter table public.site_settings enable row level security;
+
+create or replace function public.is_admin() returns boolean language sql security definer stable set search_path = public as $$
+  select exists (select 1 from public.profiles where id = auth.uid() and role = 'admin');
+$$;
+
+drop policy if exists "anyone reads site settings" on public.site_settings;
+drop policy if exists "admin changes site settings" on public.site_settings;
+create policy "anyone reads site settings" on public.site_settings for select using (true);
+create policy "admin changes site settings" on public.site_settings for all using (public.is_admin()) with check (public.is_admin());
+
+-- The admin can list members and change their plan from the portal.
+drop policy if exists "admin reads profiles" on public.profiles;
+drop policy if exists "admin updates profiles" on public.profiles;
+create policy "admin reads profiles" on public.profiles for select using (public.is_admin());
+create policy "admin updates profiles" on public.profiles for update using (public.is_admin()) with check (public.is_admin());
+
+-- MAKE YOURSELF THE ADMIN: sign up on the website first, then run this line with your own email.
+-- update public.profiles set role = 'admin' where id = (select id from auth.users where email = 'you@example.com');

@@ -9,7 +9,7 @@ In the text: "## " starts a section heading, "- " a bullet, "1. " a numbered ite
 """
 import glob, html, re, os
 
-V = '20'                      # bump when styles or scripts change, so browsers reload them
+V = '21'                      # bump when styles or scripts change, so browsers reload them
 DATE = 'November 2026'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -64,6 +64,7 @@ def page(name, title, desc, body, page_id='blog'):
 </head>
 <body data-page="{page_id}" data-live="off">
 <script src="layout.js?v={V}"></script>
+<script src="site.js?v={V}"></script>
 
 <main id="top">
 {body}

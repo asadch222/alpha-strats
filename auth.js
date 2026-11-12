@@ -5,15 +5,15 @@
    Auth.signIn(...), Auth.signOut(), Auth.get(key), Auth.set(key, value). */
 const Auth = (() => {
   const cfg = window.AS_CONFIG || {}, live = !!(cfg.supabaseUrl && cfg.supabaseKey);
-  let sb = null, user = null, plan = 'free', data = {};
+  let sb = null, user = null, plan = 'free', role = 'user', data = {};
   const ls = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* ignore */ } } };
   const loadLib = () => new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; s.onload = res; s.onerror = () => rej(new Error('The login service could not be reached.')); document.head.appendChild(s); });
   async function hash(pw, salt) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + pw)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
 
   async function loadProfile(u) {
     user = { id: u.id, email: u.email, name: (u.user_metadata && u.user_metadata.name) || u.email.split('@')[0] };
-    const [p, d] = await Promise.all([sb.from('profiles').select('name,plan').eq('id', u.id).maybeSingle(), sb.from('user_data').select('data').eq('id', u.id).maybeSingle()]);
-    plan = (p.data && p.data.plan) || 'free'; data = (d.data && d.data.data) || {};
+    const [p, d] = await Promise.all([sb.from('profiles').select('*').eq('id', u.id).maybeSingle(), sb.from('user_data').select('data').eq('id', u.id).maybeSingle()]);
+    plan = (p.data && p.data.plan) || 'free'; role = (p.data && p.data.role) || 'user'; data = (d.data && d.data.data) || {};
     if (p.data && p.data.name) user.name = p.data.name;
   }
   const ready = (async () => {
@@ -39,6 +39,9 @@ const Auth = (() => {
     live, ready, user: () => user, plan: () => plan,
     planLabel: () => (live ? plan[0].toUpperCase() + plan.slice(1) : 'Pro (preview)'),
     isPro: () => plan === 'pro' || plan === 'elite',
+    // the admin portal: with the login service, only accounts marked admin; in preview mode, whoever is logged in on this browser
+    isAdmin: () => !!user && (live ? role === 'admin' : true),
+    client: () => sb,
     async signUp(name, email, pw) {
       email = email.trim().toLowerCase();
       if (!/^\S+@\S+\.\S+$/.test(email)) fail('Please enter a valid email address.');
@@ -76,7 +79,7 @@ const Auth = (() => {
       const { error } = await sb.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: location.origin + location.pathname.replace(/[^/]*$/, 'login.html') });
       if (error) fail(error.message);
     },
-    async signOut() { if (live && sb) await sb.auth.signOut(); else ls.set('as.session', null); user = null; plan = 'free'; data = {}; paintAccount(); },
+    async signOut() { if (live && sb) await sb.auth.signOut(); else ls.set('as.session', null); user = null; plan = 'free'; role = 'user'; data = {}; paintAccount(); },
     get: (key, fallback) => (key in data ? data[key] : fallback),
     async set(key, value) { // each user's own saved items (alerts, settings)
       if (!user) return;
