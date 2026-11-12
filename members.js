@@ -1,7 +1,7 @@
 /* Members area: the premium tools, shown after logging in.
    Daily brief, dip alerts, strategy signals, personal price alerts, risk calculator, requests. */
 
-const mem = { alerts: [], notify: false, seenDips: new Set(), tab: 'brief' };
+const mem = { alerts: [], notify: false, seenDips: new Set(), tab: 'home' };
 function toast(text) {
   const el = document.createElement('div');
   el.className = 'toast'; el.textContent = text;
@@ -76,6 +76,24 @@ function paintRisk() {
     + cell('Stop distance', ((dist / entry) * 100).toFixed(2) + '%', entry > stop ? 'Long trade (stop below entry)' : 'Short trade (stop above entry)') + cell('Leverage needed', lev.toFixed(2) + 'x', lev > 1 ? 'More than your account: needs borrowed money' : 'No borrowing needed');
 }
 
+/* ---------- overview: the first screen after logging in ---------- */
+function paintHome() {
+  const mk = all(), up = mk.length ? (mk.filter((a) => a.chg >= 0).length / mk.length) * 100 : 0;
+  const dips = mk.filter((a) => a.k && a.k.scan && a.vol > 2e5 && a.kind !== 'commodities').filter((a) => { const s = a.k.scan; return (s.up && s.rsi < 45) || s.rsi < 30; }).sort((x, y) => x.k.scan.rsi - y.k.scan.rsi);
+  const watching = mem.alerts.filter((r) => !r.hit).length, desk = Site.trades().filter((t) => t.status !== 'closed' && t.show !== false && A.has(t.market)).length;
+  if (!$('mkMood')) {
+    const tile = (id, label, sub) => `<div class="panel kpi5"><small>${label}</small><b id="${id}">–</b><em id="${id}S">${sub}</em></div>`;
+    $('memKpis').innerHTML = tile('mkMood', 'Market mood', 'crypto fear and greed') + tile('mkUp', 'Markets rising', 'of all markets, last 24 hours') + tile('mkDips', 'Dip setups', 'matching the rules now') + tile('mkAl', 'My alerts', 'watching a price') + tile('mkDesk', 'Desk trades', 'open right now');
+  }
+  if (marketFG) { countUp($('mkMood'), marketFG.v); $('mkMood').style.color = fgInfo(marketFG.v)[1]; setT('mkMoodS', marketFG.label + ' today'); }
+  countUp($('mkUp'), up, (v) => Math.round(v) + '%'); countUp($('mkDips'), dips.length); countUp($('mkAl'), watching); countUp($('mkDesk'), desk);
+  const row = (a, tail) => `<div class="fund-row" data-id="${a.id}" data-go="${a.id}">${icon(a, 'sm')}${who(a)}<span class="mono" data-f="p"></span><span class="mono" data-f="c"></span>${tail}</div>`;
+  const mine = [...watch].map((id) => A.get(id)).filter(Boolean).slice(0, 8);
+  $('memWatch').innerHTML = mine.map((a) => row(a, '')).join('') || '<div class="skeleton">Nothing starred yet. Tap ★ next to any market on the <a class="lnk" href="markets.html">markets page</a>.</div>';
+  $('memDipTop').innerHTML = dips.slice(0, 5).map((a) => row(a, `<span class="badge ${a.k.scan.tone}">${a.k.scan.setup}</span>`)).join('') || '<div class="skeleton">No market matches the dip rules right now.</div>';
+  paint();
+}
+
 /* ---------- start ---------- */
 async function initMembers() {
   await Auth.ready;
@@ -83,6 +101,12 @@ async function initMembers() {
   $('memGate').hidden = !!u; $('memApp').hidden = !u;
   if (!u) return;
   setT('memName', u.name); setT('memPlan', Auth.planLabel()); setT('memEmail', u.email);
+  const hr = new Date().getHours(), first = u.name.split(' ')[0];
+  setT('memAva', first.slice(0, 1).toUpperCase()); setT('memFirst', first); setT('memHello', hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening');
+  setT('memDate', new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }));
+  const NAV = [['home', 'Overview', 'home'], ['brief', 'Daily brief', 'brief'], ['dips', 'Dip alerts', 'dip'], ['signals', 'Strategy signals', 'signal'], ['alerts', 'My price alerts', 'bell'], ['risk', 'Risk calculator', 'calc'], ['more', 'Community', 'chat']];
+  $('memTabs').innerHTML = NAV.map(([t, label, ic], i) => `<button data-t="${t}" class="${i ? '' : 'is-active'}">${pIcon(ic)}<span>${label}</span></button>`).join('');
+  document.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => $('memTabs').querySelector(`[data-t="${b.dataset.goto}"]`).click()));
   $('memPreview').hidden = Auth.live;
   const locked = Auth.live && !Auth.isPro();
   $('memUpgrade').hidden = !locked;
@@ -115,7 +139,8 @@ async function initMembers() {
   const inv = (window.AS_CONFIG || {}).discordInvite;
   $('discordBtn').textContent = inv ? 'Join the Discord' : 'Invite link coming soon';
   if (inv) $('discordBtn').href = inv; else $('discordBtn').classList.add('is-off');
-  paintBrief(); paintSignals(); paintAlerts(); paintRisk(); paintDips();
+  paintBrief(); paintSignals(); paintAlerts(); paintRisk(); paintDips(); paintHome();
+  setInterval(paintHome, 15000);
   setInterval(paintBrief, 20000); setInterval(checkAlerts, 2000);
 }
-function onScan() { if (has('memApp') && !$('memApp').hidden) { paintDips(); paintBrief(); } }
+function onScan() { if (has('memApp') && !$('memApp').hidden) { paintDips(); paintBrief(); paintHome(); } }

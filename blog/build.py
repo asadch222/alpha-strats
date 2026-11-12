@@ -9,7 +9,7 @@ In the text: "## " starts a section heading, "- " a bullet, "1. " a numbered ite
 """
 import glob, html, re, os
 
-V = '22'                      # bump when styles or scripts change, so browsers reload them
+V = '23'                      # bump when styles or scripts change, so browsers reload them
 DATE = 'November 2026'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=22">
-<link rel="stylesheet" href="mobile.css?v=22" media="(max-width: 760px)">
+<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="mobile.css?v=23" media="(max-width: 760px)">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
@@ -20,87 +20,127 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 </head>
 <body data-page="admin">
-<script src="layout.js?v=22"></script>
-<script src="site.js?v=22"></script>
-<script src="mobile.js?v=22"></script>
+<script src="layout.js?v=23"></script>
+<script src="site.js?v=23"></script>
+<script src="mobile.js?v=23"></script>
 
-<main id="top">
+<main id="top" class="portal-main">
 <section class="section tight" id="admGate" hidden>
   <div class="panel gate"><span class="tool-ico">🔒</span><h1>Admin portal</h1><p>Log in with the admin account to control the website.</p>
     <div class="hero-cta"><a class="btn btn-primary" href="login.html" data-keep>Log in</a></div></div>
 </section>
 
-<section class="section tight" id="admApp" hidden>
-  <div class="panel mem-head">
-    <div><p class="eyebrow gold">Admin portal</p><h1>Control room</h1><p class="dimtxt">Logged in as <b id="admWho"></b>. Every switch saves straight away.</p></div>
-    <div class="mem-actions"><a class="btn btn-ghost btn-sm" href="index.html" target="_blank" data-keep>Open website</a><button class="btn btn-ghost btn-sm" id="admOut">Log out</button></div>
-  </div>
-  <div class="auth-preview" id="admPreview" hidden><b>Preview mode.</b> The login service is not connected yet, so what you change here is saved in this browser only. You will see it on the website in this browser; other visitors will not. Connect the login service (see config.js) and your changes reach everyone.</div>
+<section class="portal" id="admApp" hidden>
+  <aside class="pt-side">
+    <div class="pt-user"><span class="pt-ava" id="admAva">A</span><div><b id="admWho"></b><small>Administrator</small></div></div>
+    <nav class="pt-nav" id="admTabs"></nav>
+    <div class="pt-foot"><a class="pt-link" href="index.html" target="_blank" data-keep>Open website ↗</a><button class="pt-link" id="admOut">Log out</button></div>
+  </aside>
 
-  <div class="seg mem-tabs" id="admTabs">
-    <button class="is-active" data-t="trades">Trades</button><button data-t="show">Show and hide</button><button data-t="text">Texts and prices</button><button data-t="members">Members</button>
-  </div>
+  <div class="pt-main">
+    <div class="auth-preview" id="admPreview" hidden><b>Preview mode.</b> The login service is not connected yet, so what you change here is saved in this browser only. You see it on the website in this browser; other visitors do not.</div>
 
-  <div class="adm-pane" id="pane-trades">
-    <div class="panel mem-box">
-      <h2>Open a trade</h2>
-      <p class="xp">Pick a market, say which way you are trading and at what price. It appears on the home page with live profit and loss.</p>
-      <div class="al-form">
-        <div class="cmp-pick"><label for="admMarket">Market</label><input id="admMarket" class="filter" placeholder="e.g. BTC or NVDA" autocomplete="off" spellcheck="false"><div class="search-results" id="admMarketBox" hidden></div></div>
-        <label>Direction<select id="admSide"><option value="long">Long (profit if price rises)</option><option value="short">Short (profit if price falls)</option></select></label>
-        <label>Entry price<input id="admEntry" class="filter" type="number" step="any" min="0"></label>
-        <button class="btn btn-ghost" id="admUseLive" type="button">Use live price</button>
+    <!-- overview -->
+    <div class="adm-pane" id="pane-overview">
+      <header class="pt-title"><div><p class="eyebrow gold">Admin portal</p><h1>Control room</h1></div><div class="pt-title-r"><span class="pt-clock mono" id="admClock"></span><button class="btn btn-primary" data-goto="desk">Open a trade</button></div></header>
+      <div class="kpi5s" id="admKpis"></div>
+      <div class="pt-two">
+        <div class="panel pt-card"><h3>Closed trades, added up</h3><p class="xp">Every step is one closed trade. A rising line means the wins are bigger than the losses.</p><div id="admCurve"></div></div>
+        <div class="panel pt-card"><h3>Latest activity</h3><ul class="pt-feed" id="admFeed"></ul></div>
       </div>
-      <div class="al-form">
-        <label>Stop price <em>optional</em><input id="admStop" class="filter" type="number" step="any" min="0"></label>
-        <label>Target price <em>optional</em><input id="admTarget" class="filter" type="number" step="any" min="0"></label>
-        <label>Leverage <em>optional</em><input id="admLev" class="filter" type="number" step="1" min="1" max="100" placeholder="1"></label>
-        <label class="grow">Note for visitors <em>optional</em><input id="admNote" class="filter" maxlength="160" placeholder="e.g. Pullback in an uptrend"></label>
+      <div id="trades" hidden>
+        <div class="pt-sec"><div><h3>Live on the website now</h3><p class="xp">Exactly what visitors see on the home page.</p></div><div class="lt-sum" id="ltSum"></div></div>
+        <div class="lt-grid" id="ltGrid"></div><div id="ltClosed" class="pt-hide"></div>
       </div>
-      <div class="adm-open"><label class="sw"><input type="checkbox" id="admShowNew" checked><i></i><span>Show on website straight away</span></label><span class="dimtxt mono" id="admLive"></span><button class="btn btn-primary" id="admOpen">Open trade</button></div>
     </div>
-    <div class="panel mem-box">
-      <h2>Your trades <label class="sw adm-master"><input type="checkbox" id="admTradesOn"><i></i><span>Trades section on website</span></label></h2>
-      <p class="xp">Use the switch on each trade to show or hide it. Closing a trade locks in its result and moves it to the closed list on the website.</p>
-      <div id="admTradeList"></div>
+
+    <!-- trading desk -->
+    <div class="adm-pane" id="pane-desk" hidden>
+      <div class="desk">
+        <div class="panel dk-bar" id="dkBar">
+          <div class="dk-sym"><span id="dkIcon"></span><div><b id="dkT">–</b><small id="dkName"></small></div></div>
+          <div class="dk-px"><b data-f="p">–</b><span data-f="c"></span></div>
+          <div class="dk-st"><small>24h high</small><span data-f="h">–</span></div>
+          <div class="dk-st"><small>24h low</small><span data-f="l">–</span></div>
+          <div class="dk-st"><small>24h volume</small><span data-f="v">–</span></div>
+          <div class="cmp-pick dk-find"><input id="admMarket" class="filter" placeholder="Search any market" autocomplete="off" spellcheck="false" aria-label="Search market"><div class="search-results" id="admMarketBox" hidden></div></div>
+        </div>
+        <div class="dk-favs" id="dkFavs"></div>
+        <div class="dk-grid">
+          <div class="panel dk-chart">
+            <div class="dk-chart-top"><div class="seg" id="dkTf"><button data-tf="15m">15m</button><button data-tf="1h" class="is-active">1H</button><button data-tf="4h">4H</button><button data-tf="1d">1D</button></div>
+              <span class="dk-legend"><i style="--c:#0b1220"></i>entry<i style="--c:#0a9d6c"></i>take profit<i style="--c:#e5484d"></i>stop<i style="--c:#3b82f6"></i>open trade</span></div>
+            <div id="dkChart"></div>
+          </div>
+          <div class="panel dk-ticket" id="dkTicket">
+            <div class="dk-side" id="dkSide"><button data-s="long" class="is-active">Buy / Long</button><button data-s="short">Sell / Short</button></div>
+            <div class="seg dk-type" id="dkType"><button class="is-active" data-o="market">Market price</button><button data-o="limit">My own price</button></div>
+            <div class="dk-f"><span>Entry price</span><div class="dk-in"><input id="admEntry" type="number" step="any" min="0" inputmode="decimal"><em>USDT</em></div></div>
+            <div class="dk-f"><span>Leverage <b id="dkLevV">1×</b></span><input type="range" id="admLev" min="1" max="50" step="1" value="1" aria-label="Leverage">
+              <div class="dk-chips" id="dkLevChips"><button data-l="1">1×</button><button data-l="2">2×</button><button data-l="5">5×</button><button data-l="10">10×</button><button data-l="20">20×</button><button data-l="50">50×</button></div></div>
+            <div class="dk-f"><span>Take profit <i>optional</i></span><div class="dk-in"><input id="admTarget" type="number" step="any" min="0" inputmode="decimal" placeholder="Price"><em class="up" id="dkTpPct"></em></div>
+              <div class="dk-chips" data-for="tp"><button data-pct="2">2%</button><button data-pct="5">5%</button><button data-pct="10">10%</button><button data-pct="20">20%</button></div></div>
+            <div class="dk-f"><span>Stop loss <i>optional</i></span><div class="dk-in"><input id="admStop" type="number" step="any" min="0" inputmode="decimal" placeholder="Price"><em class="down" id="dkSlPct"></em></div>
+              <div class="dk-chips" data-for="sl"><button data-pct="1">1%</button><button data-pct="2">2%</button><button data-pct="5">5%</button><button data-pct="10">10%</button></div></div>
+            <div class="dk-calc" id="dkCalc"></div>
+            <div class="dk-f"><span>Note for visitors <i>optional</i></span><div class="dk-in"><input id="admNote" maxlength="160" placeholder="e.g. Pullback in an uptrend"></div></div>
+            <label class="sw"><input type="checkbox" id="admShowNew" checked><i></i><span>Show on website straight away</span></label>
+            <button class="dk-go long" id="admOpen">Open Long</button>
+          </div>
+        </div>
+        <div class="panel dk-pos">
+          <div class="dk-pos-top"><div class="seg" id="dkPosTabs"><button class="is-active" data-p="open">Open positions <b id="dkNOpen">0</b></button><button data-p="closed">Closed <b id="dkNClosed">0</b></button></div>
+            <label class="sw adm-master"><input type="checkbox" id="admTradesOn"><i></i><span>Trades section on website</span></label></div>
+          <div id="admTradeList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- website -->
+    <div class="adm-pane" id="pane-show" hidden>
+      <header class="pt-title"><div><p class="eyebrow gold">Website</p><h1>Show and hide</h1></div></header>
+      <div class="mem-grid">
+        <div class="panel mem-box"><h2>Pages</h2><p class="xp">Switch a page off and it leaves the menu and every link. Anyone who opens it directly sees a "not available" message.</p><div id="admPages"></div></div>
+        <div class="panel mem-box"><h2>Sections</h2><p class="xp">Switch off single parts of a page.</p><div id="admSections"></div></div>
+        <div class="panel mem-box wide"><h2>Announcement bar <label class="sw adm-master"><input type="checkbox" id="admAnnOn"><i></i><span>Show</span></label></h2>
+          <p class="xp">A thin bar at the very top of every page. Good for news, offers or a new strategy.</p>
+          <div class="al-form"><label class="grow">Message<input id="admAnnText" class="filter" maxlength="140" placeholder="e.g. New premium strategy published today"></label><label>Link <em>optional</em><input id="admAnnLink" class="filter" placeholder="premium.html"></label><button class="btn btn-primary" id="admAnnSave">Save announcement</button></div></div>
+      </div>
+    </div>
+
+    <!-- texts -->
+    <div class="adm-pane" id="pane-text" hidden>
+      <header class="pt-title"><div><p class="eyebrow gold">Content</p><h1>Texts and prices</h1></div></header>
+      <div class="panel mem-box"><h2>Home page and plans</h2><p class="xp">Leave a box empty to keep the original text.</p>
+        <div class="al-form"><label class="grow">Home headline, first line<input id="admH1a" class="filter" maxlength="40" placeholder="Tested strategies."></label><label class="grow">Home headline, orange line<input id="admH1b" class="filter" maxlength="40" placeholder="Every trade shown."></label></div>
+        <div class="al-form"><label class="grow">Sentence under the headline<input id="admLede" class="filter" maxlength="160" placeholder="Rule-based trading strategies, published with their full backtest."></label></div>
+        <div class="al-form"><label>Pro plan price<input id="admPrice" class="filter" maxlength="12" placeholder="$79"></label><label class="grow">Contact email shown in the footer<input id="admContact" class="filter" type="email" placeholder="hello@yourdomain.com"></label><button class="btn btn-primary" id="admTextSave">Save texts</button></div>
+      </div>
+      <div class="panel mem-box"><h2>Start again</h2><p class="xp">Puts the website back exactly as it was built: everything shown, original texts, no trades.</p><button class="btn btn-ghost" id="admReset">Reset everything</button></div>
+    </div>
+
+    <!-- members -->
+    <div class="adm-pane" id="pane-members" hidden>
+      <header class="pt-title"><div><p class="eyebrow gold">People</p><h1>Members</h1></div></header>
+      <div class="panel mem-box"><div id="admMembers"></div></div>
     </div>
   </div>
-
-  <div class="adm-pane" id="pane-show" hidden>
-    <div class="mem-grid">
-      <div class="panel mem-box"><h2>Pages</h2><p class="xp">Switch a page off and it leaves the menu and every link. Anyone who opens it directly sees a "not available" message.</p><div id="admPages"></div></div>
-      <div class="panel mem-box"><h2>Sections</h2><p class="xp">Switch off single parts of a page.</p><div id="admSections"></div></div>
-      <div class="panel mem-box wide"><h2>Announcement bar <label class="sw adm-master"><input type="checkbox" id="admAnnOn"><i></i><span>Show</span></label></h2>
-        <p class="xp">A thin bar at the very top of every page. Good for news, offers or a new strategy.</p>
-        <div class="al-form"><label class="grow">Message<input id="admAnnText" class="filter" maxlength="140" placeholder="e.g. New premium strategy published today"></label><label>Link <em>optional</em><input id="admAnnLink" class="filter" placeholder="premium.html"></label><button class="btn btn-primary" id="admAnnSave">Save announcement</button></div></div>
-    </div>
-  </div>
-
-  <div class="adm-pane" id="pane-text" hidden>
-    <div class="panel mem-box"><h2>Texts and prices</h2><p class="xp">Leave a box empty to keep the original text.</p>
-      <div class="al-form"><label class="grow">Home headline, first line<input id="admH1a" class="filter" maxlength="40" placeholder="Tested strategies."></label><label class="grow">Home headline, orange line<input id="admH1b" class="filter" maxlength="40" placeholder="Every trade shown."></label></div>
-      <div class="al-form"><label class="grow">Sentence under the headline<input id="admLede" class="filter" maxlength="160" placeholder="Rule-based trading strategies, published with their full backtest."></label></div>
-      <div class="al-form"><label>Pro plan price<input id="admPrice" class="filter" maxlength="12" placeholder="$79"></label><label class="grow">Contact email shown in the footer<input id="admContact" class="filter" type="email" placeholder="hello@yourdomain.com"></label><button class="btn btn-primary" id="admTextSave">Save texts</button></div>
-    </div>
-    <div class="panel mem-box"><h2>Start again</h2><p class="xp">Puts the website back exactly as it was built: everything shown, original texts, no trades.</p><button class="btn btn-ghost" id="admReset">Reset everything</button></div>
-  </div>
-
-  <div class="adm-pane" id="pane-members" hidden><div class="panel mem-box"><h2>Members</h2><div id="admMembers"></div></div></div>
 </section>
 </main>
 
 <script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="coin-logos.js?v=22"></script>
-<script src="common.js?v=22"></script>
-<script src="strategies.js?v=22"></script>
-<script src="strategy-view.js?v=22"></script>
-<script src="features.js?v=22"></script>
-<script src="terminal.js?v=22"></script>
-<script src="sentiment.js?v=22"></script>
-<script src="config.js?v=22"></script>
-<script src="auth.js?v=22"></script>
-<script src="admin.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<script src="coin-logos.js?v=23"></script>
+<script src="common.js?v=23"></script>
+<script src="strategies.js?v=23"></script>
+<script src="strategy-view.js?v=23"></script>
+<script src="features.js?v=23"></script>
+<script src="terminal.js?v=23"></script>
+<script src="sentiment.js?v=23"></script>
+<script src="config.js?v=23"></script>
+<script src="auth.js?v=23"></script>
+<script src="trades.js?v=23"></script>
+<script src="admin.js?v=23"></script>
+<script src="app.js?v=23"></script>
 </body>
 </html>

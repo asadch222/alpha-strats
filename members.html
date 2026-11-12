@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=22">
-<link rel="stylesheet" href="mobile.css?v=22" media="(max-width: 760px)">
+<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="mobile.css?v=23" media="(max-width: 760px)">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
@@ -20,29 +20,41 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 </head>
 <body data-page="members">
-<script src="layout.js?v=22"></script>
-<script src="site.js?v=22"></script>
-<script src="mobile.js?v=22"></script>
+<script src="layout.js?v=23"></script>
+<script src="site.js?v=23"></script>
+<script src="mobile.js?v=23"></script>
 
-<main id="top">
+<main id="top" class="portal-main">
 <section class="section tight" id="memGate" hidden>
   <div class="panel gate"><span class="tool-ico">🔒</span><h1>Members area</h1><p>Log in to open your daily brief, dip alerts, strategy signals, price alerts and the risk calculator.</p>
     <div class="hero-cta"><a class="btn btn-primary" href="login.html">Log in</a><a class="btn btn-ghost" href="login.html#signup">Create a free account</a></div></div>
 </section>
 
-<section class="section tight" id="memApp" hidden>
-  <div class="panel mem-head">
-    <div><p class="eyebrow gold">Members area</p><h1>Hello, <span id="memName"></span>.</h1><p class="dimtxt"><span id="memEmail"></span> · Plan: <b id="memPlan"></b></p></div>
-    <div class="mem-actions"><label class="hm-check"><input type="checkbox" id="ntToggle"> Browser notifications</label><button class="btn btn-ghost btn-sm" id="memOut">Log out</button></div>
-  </div>
+<section class="portal" id="memApp" hidden>
+  <aside class="pt-side">
+    <div class="pt-user"><span class="pt-ava" id="memAva">A</span><div><b id="memName"></b><small id="memEmail"></small></div></div>
+    <div class="pt-plan"><span>Your plan</span><b id="memPlan"></b></div>
+    <nav class="pt-nav" id="memTabs"></nav>
+    <div class="pt-foot"><label class="pt-link"><input type="checkbox" id="ntToggle"> Browser notifications</label><button class="pt-link" id="memOut">Log out</button></div>
+  </aside>
+  <div class="pt-main">
   <div class="auth-preview" id="memPreview" hidden><b>Preview mode.</b> The real login service is not connected yet. This account and its alerts are saved only in this browser, and every tool is unlocked so you can try it.</div>
   <div class="auth-preview up" id="memUpgrade" hidden><b>You are on the Free plan.</b> Tools marked Pro are locked. <a class="lnk" href="index.html#pricing">See plans</a></div>
 
-  <div class="seg mem-tabs" id="memTabs">
-    <button class="is-active" data-t="brief">Daily brief</button><button data-t="dips">Dip alerts</button><button data-t="signals">Strategy signals</button><button data-t="alerts">My price alerts</button><button data-t="risk">Risk calculator</button><button data-t="more">Community &amp; requests</button>
+  <div class="mem-pane" id="pane-home">
+    <header class="pt-title"><div><p class="eyebrow gold" id="memDate"></p><h1><span id="memHello">Hello</span>, <span id="memFirst"></span>.</h1></div><div class="pt-title-r"><a class="btn btn-ghost" href="markets.html">Browse markets</a><a class="btn btn-primary" href="chart.html">Open a chart</a></div></header>
+    <div class="kpi5s" id="memKpis"></div>
+    <div id="trades" hidden>
+      <div class="pt-sec"><div><h3>Live trades from our desk</h3><p class="xp">Each card follows the live price. Green is in profit, red is losing.</p></div><div class="lt-sum" id="ltSum"></div></div>
+      <div class="lt-grid" id="ltGrid"></div><div class="lt-closed" id="ltClosed"></div>
+    </div>
+    <div class="pt-two">
+      <div class="panel pt-card"><h3>My watchlist</h3><p class="xp">Markets you starred, with live prices. Tap one to open its page.</p><div class="pt-list" id="memWatch"></div></div>
+      <div class="panel pt-card"><h3>Dip setups right now</h3><p class="xp">Markets pulling back while their trend is still up.</p><div class="pt-list" id="memDipTop"></div><button class="lnk pt-more" data-goto="dips">See all dip alerts →</button></div>
+    </div>
   </div>
 
-  <div class="mem-pane" id="pane-brief"><div class="panel mem-box"><h2>Today's market brief</h2><div id="briefBody"><div class="skeleton">Writing your brief…</div></div></div></div>
+  <div class="mem-pane" id="pane-brief" hidden><div class="panel mem-box"><h2>Today's market brief</h2><div id="briefBody"><div class="skeleton">Writing your brief…</div></div></div></div>
 
   <div class="mem-pane" id="pane-dips" hidden><div class="panel mem-box" data-pro><h2>Dip-buying alerts <span class="badge prem">Pro</span> <small class="dimtxt" id="dipCount"></small></h2>
     <p class="xp">Markets that are pulling back while their trend is still up, or that have been sold very hard. Rules: 1-hour candles, uptrend with momentum under 45, or momentum under 30. A dip setup is a place to look, not a promise of a bounce.</p>
@@ -72,21 +84,23 @@
       <button class="btn btn-primary" id="rqSend">Send request</button></div>
   </div></div>
   <div class="toasts" id="toasts"></div>
+</div>
 </section>
 </main>
 
 <script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="coin-logos.js?v=22"></script>
-<script src="common.js?v=22"></script>
-<script src="strategies.js?v=22"></script>
-<script src="strategy-view.js?v=22"></script>
-<script src="features.js?v=22"></script>
-<script src="terminal.js?v=22"></script>
-<script src="sentiment.js?v=22"></script>
-<script src="config.js?v=22"></script>
-<script src="auth.js?v=22"></script>
-<script src="members.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<script src="coin-logos.js?v=23"></script>
+<script src="common.js?v=23"></script>
+<script src="strategies.js?v=23"></script>
+<script src="strategy-view.js?v=23"></script>
+<script src="features.js?v=23"></script>
+<script src="terminal.js?v=23"></script>
+<script src="sentiment.js?v=23"></script>
+<script src="config.js?v=23"></script>
+<script src="auth.js?v=23"></script>
+<script src="trades.js?v=23"></script>
+<script src="members.js?v=23"></script>
+<script src="app.js?v=23"></script>
 </body>
 </html>

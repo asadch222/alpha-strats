@@ -90,3 +90,17 @@ const chartBase = {
   timeScale: { borderColor: '#e6eaf0', timeVisible: true, secondsVisible: false },
   crosshair: { mode: 0, vertLine: { color: '#94a0b2', labelBackgroundColor: '#0b1220' }, horzLine: { color: '#94a0b2', labelBackgroundColor: '#0b1220' } },
 };
+
+/* ---------- shared by the admin and member dashboards ---------- */
+const PI = { home: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z', desk: 'M3 17l5-6 4 3 6-8 3 3', eye: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', text: 'M4 6h16M4 12h16M4 18h10',
+  users: 'M4 21c0-4 4-6 8-6s8 2 8 6M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', brief: 'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7', dip: 'M3 7l6 6 4-4 8 8M21 11v6h-6', signal: 'M2 12h4l3-8 4 16 3-8h6',
+  bell: 'M6 16v-5a6 6 0 1 1 12 0v5l2 2H4zM10 21h4', calc: 'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01', chat: 'M4 5h16v11H9l-5 4z', star: 'm12 3 2.700 5.600 6.100.800-4.500 4.300 1.100 6.100L12 16.900 6.600 19.800l1.100-6.100L3.200 9.400l6.100-.800z' };
+const pIcon = (k) => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${PI[k]}"/></svg>`;
+function countUp(el, to, fmt = (v) => Math.round(v), ms = 900) { // numbers roll to their value instead of jumping
+  if (!el) return;
+  const from = el._to == null ? 0 : el._to, t0 = performance.now(); el._to = to;
+  cancelAnimationFrame(el._raf);
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = fmt(to); return; }
+  const step = (now) => { const k = Math.min(1, (now - t0) / ms), e = 1 - (1 - k) ** 3; el.textContent = fmt(from + (to - from) * e); if (k < 1) el._raf = requestAnimationFrame(step); };
+  el._raf = requestAnimationFrame(step);
+}
