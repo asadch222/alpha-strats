@@ -1227,3 +1227,6 @@ h1 em { background: none; -webkit-background-clip: border-box; background-clip: 
 .sw { position: relative; } .sw span { white-space: nowrap; font: 500 13.5px var(--sans); color: var(--text); letter-spacing: 0; text-transform: none; }
 .lt dd { color: var(--text); margin: 0; font-size: 13.5px; white-space: nowrap; } .lt dt { margin: 0; }
 .sw { flex: none; }
+
+/* phone app shell pieces: hidden here, switched on by mobile.css on small screens */
+.tabbar, .sheet, .sheet-back, .m-ico, .m-cancel, .m-hint, .swipe-dots { display: none; }
