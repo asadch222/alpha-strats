@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=23">
-<link rel="stylesheet" href="mobile.css?v=23" media="(max-width: 760px)">
+<link rel="stylesheet" href="styles.css?v=24">
+<link rel="stylesheet" href="mobile.css?v=24" media="(max-width: 760px)">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
@@ -20,9 +20,9 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 </head>
 <body data-page="admin">
-<script src="layout.js?v=23"></script>
-<script src="site.js?v=23"></script>
-<script src="mobile.js?v=23"></script>
+<script src="layout.js?v=24"></script>
+<script src="site.js?v=24"></script>
+<script src="mobile.js?v=24"></script>
 
 <main id="top" class="portal-main">
 <section class="section tight" id="admGate" hidden>
@@ -57,6 +57,15 @@
     <!-- trading desk -->
     <div class="adm-pane" id="pane-desk" hidden>
       <div class="desk">
+        <div class="dk-acct" id="dkAcct">
+          <div class="dk-acct-tag"><b>Demo account</b><small>practice money, not real funds</small></div>
+          <div><small>Account value</small><b id="acEq">–</b></div>
+          <div><small>Open profit / loss</small><b id="acOpen">–</b></div>
+          <div><small>Cash balance</small><b id="acBal">–</b></div>
+          <div><small>In open trades</small><b id="acUsed">–</b></div>
+          <div><small>Free to use</small><b id="acFree">–</b></div>
+          <button class="btn btn-sm" id="acSet">Change funds</button>
+        </div>
         <div class="panel dk-bar" id="dkBar">
           <div class="dk-sym"><span id="dkIcon"></span><div><b id="dkT">–</b><small id="dkName"></small></div></div>
           <div class="dk-px"><b data-f="p">–</b><span data-f="c"></span></div>
@@ -76,6 +85,8 @@
             <div class="dk-side" id="dkSide"><button data-s="long" class="is-active">Buy / Long</button><button data-s="short">Sell / Short</button></div>
             <div class="seg dk-type" id="dkType"><button class="is-active" data-o="market">Market price</button><button data-o="limit">My own price</button></div>
             <div class="dk-f"><span>Entry price</span><div class="dk-in"><input id="admEntry" type="number" step="any" min="0" inputmode="decimal"><em>USDT</em></div></div>
+            <div class="dk-f"><span>Amount to put in <b id="dkSize"></b></span><div class="dk-in"><input id="admAmt" type="number" step="any" min="0" inputmode="decimal" placeholder="Demo dollars"><em>USD</em></div>
+              <div class="dk-chips" data-for="amt"><button data-amt="5">5%</button><button data-amt="10">10%</button><button data-amt="25">25%</button><button data-amt="50">50%</button></div></div>
             <div class="dk-f"><span>Leverage <b id="dkLevV">1×</b></span><input type="range" id="admLev" min="1" max="50" step="1" value="1" aria-label="Leverage">
               <div class="dk-chips" id="dkLevChips"><button data-l="1">1×</button><button data-l="2">2×</button><button data-l="5">5×</button><button data-l="10">10×</button><button data-l="20">20×</button><button data-l="50">50×</button></div></div>
             <div class="dk-f"><span>Take profit <i>optional</i></span><div class="dk-in"><input id="admTarget" type="number" step="any" min="0" inputmode="decimal" placeholder="Price"><em class="up" id="dkTpPct"></em></div>
@@ -130,17 +141,17 @@
 
 <script>renderFooter()</script>
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="coin-logos.js?v=23"></script>
-<script src="common.js?v=23"></script>
-<script src="strategies.js?v=23"></script>
-<script src="strategy-view.js?v=23"></script>
-<script src="features.js?v=23"></script>
-<script src="terminal.js?v=23"></script>
-<script src="sentiment.js?v=23"></script>
-<script src="config.js?v=23"></script>
-<script src="auth.js?v=23"></script>
-<script src="trades.js?v=23"></script>
-<script src="admin.js?v=23"></script>
-<script src="app.js?v=23"></script>
+<script src="coin-logos.js?v=24"></script>
+<script src="common.js?v=24"></script>
+<script src="strategies.js?v=24"></script>
+<script src="strategy-view.js?v=24"></script>
+<script src="features.js?v=24"></script>
+<script src="terminal.js?v=24"></script>
+<script src="sentiment.js?v=24"></script>
+<script src="config.js?v=24"></script>
+<script src="auth.js?v=24"></script>
+<script src="trades.js?v=24"></script>
+<script src="admin.js?v=24"></script>
+<script src="app.js?v=24"></script>
 </body>
 </html>

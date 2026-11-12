@@ -24,7 +24,8 @@ const Site = (() => {
     ['all.feed', 'Every page', '"Live" indicator in the menu', '#feedPill'],
     ['all.cta', 'Every page', '"Get strategies" button in the menu', '.nav-right .btn-primary'],
   ];
-  const blank = () => ({ hide: [], announce: { on: false, text: '', link: '' }, text: {}, trades: [], v: 0 });
+  const blank = () => ({ hide: [], announce: { on: false, text: '', link: '' }, text: {}, trades: [], demo: { start: 50000 }, v: 0 });
+  const START = () => (state.demo && state.demo.start > 0 ? state.demo.start : 50000);
   const page = () => (document.body && document.body.dataset.page) || '';
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const cfg = () => window.AS_CONFIG || {};
@@ -122,6 +123,17 @@ const Site = (() => {
     reset() { state = blank(); },
     trades: () => state.trades || [],
     // profit or loss of a trade in percent, at a given price
-    pl(t, price) { const p = t.status === 'closed' ? t.exit : price; return p ? (p / t.entry - 1) * 100 * (t.side === 'short' ? -1 : 1) * (t.lev || 1) : null; },
+    // a trade cannot lose more than the money put into it, so the loss stops at -100%
+    pl(t, price) { const p = t.status === 'closed' ? t.exit : price; return p ? Math.max(-100, (p / t.entry - 1) * 100 * (t.side === 'short' ? -1 : 1) * (t.lev || 1)) : null; },
+    // the same result in demo dollars, for trades that were given an amount
+    usd(t, price) { const p = this.pl(t, price); return t.amount && p != null ? (t.amount * p) / 100 : null; },
+    // the demo account: starting funds, plus closed results, plus what open trades are showing now
+    account(priceOf) {
+      const start = START(); let realised = 0, used = 0, open = 0;
+      (state.trades || []).forEach((t) => { if (!t.amount) return; if (t.status === 'closed') realised += this.usd(t) || 0; else { used += t.amount; open += this.usd(t, priceOf(t.market)) || 0; } });
+      const balance = start + realised;
+      return { start, realised, balance, used, open, equity: balance + open, free: balance - used };
+    },
+    setDemo(start) { state.demo = { start }; },
   };
 })();

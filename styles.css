@@ -1353,3 +1353,17 @@ main.portal-main { max-width: 1500px; }
 .sw input { inset: 0; width: 100%; height: 100%; margin: 0; }
 .sw { min-width: max-content; }
 @media (max-width: 960px) { .dk-pos-top { display: grid; gap: 10px; justify-items: start; } }
+
+/* ---------- demo funds ---------- */
+.dk-acct { display: flex; align-items: center; gap: 14px 34px; flex-wrap: wrap; padding: 14px 20px; border-radius: 18px; color: #fff; background: linear-gradient(120deg, #0b1220, #17284a); box-shadow: 0 20px 44px -24px rgba(11, 18, 32, .7); position: relative; overflow: hidden; }
+.dk-acct::after { content: ""; position: absolute; right: -60px; top: -80px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(closest-side, rgba(10, 157, 108, .35), transparent); transition: background .6s; pointer-events: none; }
+.dk-acct.is-down::after { background: radial-gradient(closest-side, rgba(229, 72, 77, .35), transparent); }
+.dk-acct > div { position: relative; z-index: 1; } .dk-acct small { display: block; font-size: 11.5px; color: #93a0b5; } .dk-acct b { font: 600 16px var(--mono); font-variant-numeric: tabular-nums; }
+.dk-acct #acEq { font-size: 26px; font-weight: 700; letter-spacing: -.02em; } .dk-acct b.up { color: #3ddc97; } .dk-acct b.down { color: #ff7b7f; }
+.dk-acct-tag b { font: 700 13px var(--sans); color: #ffd98a; letter-spacing: .02em; text-transform: uppercase; }
+.dk-acct .btn { margin-left: auto; background: rgba(255, 255, 255, .1); color: #fff; border-color: rgba(255, 255, 255, .18); position: relative; z-index: 1; }
+.dk-amt { display: block; font: 11px var(--mono); color: var(--muted); margin-top: 2px; }
+.dk-pl small { display: block; font: 500 11.5px var(--mono); opacity: .8; margin-top: 1px; }
+.lt-usd { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-top: -6px; } .lt-usdv { font: 700 19px var(--mono); color: var(--c); font-variant-numeric: tabular-nums; transition: color .4s; } .lt-usd span { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 960px) { .dk-acct { gap: 12px 22px; padding: 14px 16px; } .dk-acct-tag { flex: 1 1 100%; } .dk-acct #acEq { font-size: 22px; } .dk-acct .btn { margin-left: 0; } }
+.kpi5 em b { font: 600 12.5px var(--mono); letter-spacing: 0; }

@@ -14,6 +14,7 @@ const Trades = (() => {
       <header><a class="lt-who" href="chart.html?m=${encodeURIComponent(a.id)}">${icon(a)}<div><b>${esc(a.t)}</b><small>${esc(a.name || a.sub || '')}</small></div></a>
         <span class="lt-side ${long ? 'long' : 'short'}">${long ? '▲ Long' : '▼ Short'}${t.lev > 1 ? ' · ' + t.lev + '×' : ''}</span></header>
       <div class="lt-pl"><b class="lt-pct">–</b><span class="lt-word">waiting for price</span></div>
+      ${t.amount ? `<div class="lt-usd"><b class="lt-usdv">–</b><span>on ${usd(t.amount, 0)} of demo money${t.lev > 1 ? ', ' + t.lev + '× leverage' : ''}</span></div>` : ''}
       <div class="lt-spark"></div>
       ${track}
       <dl><div><dt>Entry</dt><dd>${fmtPx(t.entry)}</dd></div><div><dt>Now</dt><dd class="lt-now">–</dd></div><div><dt>Opened</dt><dd>${ago(t.opened)}</dd></div></dl>
@@ -23,7 +24,7 @@ const Trades = (() => {
   }
   function closedRow(t) {
     const a = A.get(t.market), pl = Site.pl(t);
-    return `<tr><td><div class="cell-asset">${icon(a, 'sm')}<b>${esc(a.t)}</b></div></td><td>${t.side === 'short' ? 'Short' : 'Long'}</td><td class="num">${fmtPx(t.entry)}</td><td class="num">${fmtPx(t.exit)}</td><td class="num ${cls(pl)}"><b>${fmtPct(pl)}</b></td><td class="dimtxt">${new Date(t.closed || t.opened).toLocaleDateString()}</td></tr>`;
+    return `<tr><td><div class="cell-asset">${icon(a, 'sm')}<b>${esc(a.t)}</b></div></td><td>${t.side === 'short' ? 'Short' : 'Long'}</td><td class="num">${fmtPx(t.entry)}</td><td class="num">${fmtPx(t.exit)}</td><td class="num ${cls(pl)}"><b>${t.amount ? usdS(Site.usd(t), 0) + ' · ' : ''}${fmtPct(pl)}</b></td><td class="dimtxt">${new Date(t.closed || t.opened).toLocaleDateString()}</td></tr>`;
   }
 
   function render() {
@@ -47,7 +48,8 @@ const Trades = (() => {
   function paintSummary(open, closed) {
     const pls = open.map((t) => Site.pl(t, A.get(t.market).price)).filter((x) => x != null);
     const avg = pls.length ? pls.reduce((s, x) => s + x, 0) / pls.length : null, wins = closed.filter((t) => Site.pl(t) > 0).length;
-    $('ltSum').innerHTML = `<div><b>${open.length}</b><span>open trade${open.length === 1 ? '' : 's'}</span></div>
+    const ac = Site.account((id) => (A.get(id) || {}).price), demo = Site.trades().some((t) => t.amount);
+    $('ltSum').innerHTML = `${demo ? `<div><b class="${cls(ac.equity - ac.start)}">${usd(ac.equity, 0)}</b><span>demo account, started at ${usd(ac.start, 0)}</span></div>` : ''}<div><b>${open.length}</b><span>open trade${open.length === 1 ? '' : 's'}</span></div>
       <div><b class="${cls(avg)}">${avg == null ? '–' : fmtPct(avg)}</b><span>average on open trades</span></div>
       <div><b>${closed.length ? wins + ' of ' + closed.length : '–'}</b><span>closed trades in profit</span></div>`;
   }
@@ -71,6 +73,7 @@ const Trades = (() => {
       tween(el.querySelector('.lt-pct'), was == null ? 0 : was, pl);
       el.querySelector('.lt-word').textContent = pl >= 0 ? 'profit so far' : 'loss so far';
       el.querySelector('.lt-now').textContent = fmtPx(a.price);
+      const uv = el.querySelector('.lt-usdv'); if (uv) uv.textContent = usdS(Site.usd(t, a.price), 2);
       if (was != null) { el.classList.remove('tick-up', 'tick-down'); void el.offsetWidth; el.classList.add(pl > was ? 'tick-up' : 'tick-down'); }
       const mark = el.querySelector('.lt-mark');
       if (mark) {
